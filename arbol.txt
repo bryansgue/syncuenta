@@ -5,8 +5,17 @@
 │   │       └── route.ts
 │   ├── dashboard
 │   │   ├── components
+│   │   │   ├── NetworksPanel
+│   │   │   │   ├── NetworkButton.tsx
+│   │   │   │   └── NetworksPanel.tsx
+│   │   │   ├── ProfileSidebar
+│   │   │   │   ├── ProfileCard.tsx
+│   │   │   │   └── ProfileSidebar.tsx
 │   │   │   └── SocialButtons.tsx
-│   │   └── page.tsx
+│   │   ├── header.tsx
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── sidebar.tsx
 │   ├── favicon.ico
 │   ├── globals.css
 │   ├── layout.tsx
@@ -16,10 +25,21 @@
 │   └── register
 │       └── page.tsx
 ├── arbol.txt
+├── components
+│   └── ui
+│       ├── Button.tsx
+│       ├── Card.tsx
+│       └── Input.tsx
 ├── debugFiles.js
 ├── eslint.config.mjs
+├── hooks
+│   ├── useNetworks.ts
+│   └── useProfiles.ts
 ├── lib
-│   └── supabaseClient.ts
+│   └── supabase
+│       ├── client.ts
+│       ├── networks.ts
+│       └── profiles.ts
 ├── middleware_backup.ts
 ├── next.config.ts
 ├── next-env.d.ts
@@ -33,7 +53,12 @@
 │   ├── vercel.svg
 │   └── window.svg
 ├── README.md
+├── salida.txt
 ├── tailwind.config.js
-└── tsconfig.json
+├── tsconfig.json
+└── types
+    ├── NetworkAccount.ts
+    ├── NetworkKey.ts
+    └── Profile.ts
 
-9 directories, 27 files
+16 directories, 45 files

@@ -1,0 +1,766 @@
+
+=====================================
+🔍   ARCHIVOS CRÍTICOS DEL PROYECTO
+=====================================
+
+
+📌 FILE: app/dashboard/page.tsx
+----------------------------------------------
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase/client";
+
+import ProfileSidebar from "./components/ProfileSidebar/ProfileSidebar";
+import NetworksPanel from "./components/NetworksPanel/NetworksPanel";
+
+import { useProfiles } from "@/hooks/useProfiles";
+import { useNetworks } from "@/hooks/useNetworks";
+
+export default function DashboardPage() {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  // ===== HOOKS =====
+  const {
+    profiles,
+    selected,
+    setSelected,
+    loading: loadingProfiles,
+    addProfile,
+    removeProfile,
+    reload: reloadProfiles,
+  } = useProfiles(user?.id || null);
+
+  const {
+    networks,
+    toggle,
+    reload: reloadNetworks,
+  } = useNetworks(selected?.id ?? null);
+
+  // ===== LOAD USER SESSION =====
+  useEffect(() => {
+    const load = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        window.location.href = "/login";
+        return;
+      }
+
+      setUser(session.user);
+      setLoading(false);
+    };
+
+    load();
+  }, []);
+
+  // ===== LOAD NETWORKS WHEN PROFILE CHANGES =====
+  useEffect(() => {
+    if (selected?.id) {
+      reloadNetworks();
+    }
+  }, [selected]);
+
+  if (loading || loadingProfiles) {
+    return <p className="p-10 text-lg">Cargando...</p>;
+  }
+
+  // ===== COUNT CONNECTED NETWORKS =====
+  const connectedNetworks = networks.filter((n) => n.is_connected).length;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-10 flex justify-center">
+      
+      <div className="
+        w-full max-w-6xl 
+        bg-white/60 backdrop-blur-xl 
+        rounded-2xl shadow-2xl 
+        p-10 border border-gray-200
+      ">
+
+        {/* ================= HEADER SALUDO + CHECKLIST ================= */}
+        <div className="flex items-center justify-between mb-10">
+
+          {/* SALUDO */}
+          <h1 className="text-3xl font-bold text-gray-800">
+            Bienvenido {user?.email}
+          </h1>
+
+          {/* CHECKLIST + IR A PUBLICAR */}
+          <div className="flex items-center gap-6">
+
+            {/* CHECKLIST */}
+            <div className="flex items-center gap-5 bg-blue-50 border border-blue-200 px-5 py-3 rounded-xl shadow-sm">
+
+              <div className="flex items-center gap-2 text-gray-700 text-sm font-medium">
+                <span className="text-green-600">✔</span> Crear perfil
+              </div>
+
+              <div className="flex items-center gap-2 text-gray-700 text-sm font-medium">
+                <span className="text-green-600">✔</span> Conectar redes
+              </div>
+
+              <div className="flex items-center gap-2 text-gray-700 text-sm font-medium">
+                <span className="text-green-600">✔</span> Listo
+              </div>
+            </div>
+
+            {/* BOTÓN IR A PUBLICAR */}
+            <a
+              href="/dashboard/publish"
+              className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition shadow font-medium"
+            >
+              Ir a publicar
+            </a>
+
+          </div>
+        </div>
+
+        {/* ================= GRID ================= */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+          {/* === LEFT PANEL (Profiles) === */}
+          <div className="
+            bg-white/80 backdrop-blur 
+            p-8 rounded-xl shadow-lg 
+            border border-gray-200
+          ">
+            <ProfileSidebar
+              profiles={profiles}
+              selected={selected}
+              onSelect={(p) => setSelected(p)}
+              onCreate={async (name) => {
+                await addProfile(name);
+                await reloadProfiles();
+              }}
+              onDelete={async (id) => {
+                await removeProfile(id);
+                await reloadProfiles();
+              }}
+            />
+          </div>
+
+          {/* === RIGHT PANEL (Networks) === */}
+          <div className="
+            bg-white/80 backdrop-blur 
+            rounded-xl shadow-lg border border-gray-200
+            p-10
+            w-full
+          ">
+            <NetworksPanel
+              profile={selected}
+              networks={networks}
+              onToggle={toggle}
+            />
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+
+📌 FILE: app/dashboard/components/NetworksPanel/NetworksPanel.tsx
+----------------------------------------------
+"use client";
+
+import { useState } from "react";
+import SocialButtons from "../SocialButtons";
+import { NetworkKey } from "@/types/NetworkKey";
+import { NetworkAccount } from "@/types/NetworkAccount";
+
+interface Props {
+  profile: any;
+  networks: NetworkAccount[];
+  onToggle: (key: NetworkKey, current: boolean) => void;
+}
+
+export default function NetworksPanel({ profile, networks, onToggle }: Props) {
+  const [loadingId, setLoadingId] = useState<NetworkKey | null>(null);
+
+  const handleToggle = async (network: NetworkKey, isConnected: boolean) => {
+    if (loadingId) return;
+
+    if (isConnected) {
+      const ok = confirm(`¿Seguro que deseas desconectar ${network}?`);
+      if (!ok) return;
+    }
+
+    setLoadingId(network);
+    await onToggle(network, isConnected);
+    setLoadingId(null);
+  };
+
+  // 🔥 Si no hay perfil, mostramos mensaje y dejamos de renderizar
+  if (!profile) {
+    return (
+      <div className="text-gray-500 text-center py-10">
+        <p className="text-lg font-semibold">No hay perfiles seleccionados</p>
+        <p className="text-sm mt-2">Crea un perfil para conectar tus redes sociales</p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h2 className="text-xl font-bold mb-5">
+        🌐 Redes de: {profile?.profile_name || "Perfil sin nombre"}
+      </h2>
+
+      <SocialButtons
+        networks={networks}
+        onToggle={handleToggle}
+        loadingId={loadingId}
+      />
+    </div>
+  );
+}
+
+
+📌 FILE: app/dashboard/components/NetworksPanel/NetworkButton.tsx
+----------------------------------------------
+"use client";
+
+import { ReactNode } from "react";
+
+interface Props {
+  icon: ReactNode;
+  label: string;
+  active: boolean;
+  color: string;
+  loading: boolean;
+  onClick: () => void;
+}
+
+export default function NetworkButton({
+  icon,
+  label,
+  active,
+  color,
+  loading,
+  onClick,
+}: Props) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={loading}
+      className={`
+        w-full flex items-center justify-between p-4 rounded-xl border shadow-sm
+        hover:shadow-md hover:scale-[1.01] transition-all duration-200
+        cursor-pointer
+        ${active ? "border-transparent text-white" : "border-gray-200 bg-white"}
+        ${loading ? "opacity-60 cursor-not-allowed" : ""}
+      `}
+      style={{ background: active ? color : undefined }}
+    >
+      <div className="flex items-center gap-3">
+        <div className="text-xl">{icon}</div>
+        <span className="font-semibold">{label}</span>
+      </div>
+
+      {loading ? (
+        <div
+          className="
+            h-5 w-5 border-2 border-white border-t-transparent 
+            rounded-full animate-spin
+          "
+        ></div>
+      ) : (
+        <span
+          className={`
+            px-3 py-1 rounded-md text-xs font-semibold
+            ${active ? "bg-white/25 text-white" : "bg-gray-100 text-gray-700"}
+          `}
+        >
+          {active ? "Desconectar" : "Conectar"}
+        </span>
+      )}
+    </button>
+  );
+}
+
+
+📌 FILE: app/dashboard/components/SocialButtons.tsx
+----------------------------------------------
+"use client";
+
+import { NetworkKey } from "@/types/NetworkKey";
+import { NetworkAccount } from "@/types/NetworkAccount";
+import NetworkButton from "./NetworksPanel/NetworkButton";
+
+import {
+  Instagram,
+  Facebook,
+  Linkedin,
+  Twitter,
+  Hexagon,
+} from "lucide-react";
+
+interface Props {
+  networks: NetworkAccount[];
+  onToggle: (key: NetworkKey, current: boolean) => void;
+  loadingId?: NetworkKey | null;
+}
+
+const NETWORKS = [
+  {
+    key: "instagram" as NetworkKey,
+    label: "Instagram",
+    color: "#E1306C",
+    icon: <Instagram size={20} />,
+  },
+  {
+    key: "facebook" as NetworkKey,
+    label: "Facebook",
+    color: "#1877F2",
+    icon: <Facebook size={20} />,
+  },
+  {
+    key: "tiktok" as NetworkKey,
+    label: "TikTok",
+    color: "#000000",
+    icon: <Hexagon size={20} />,
+  },
+  {
+    key: "linkedin" as NetworkKey,
+    label: "LinkedIn",
+    color: "#0A66C2",
+    icon: <Linkedin size={20} />,
+  },
+  {
+    key: "threads" as NetworkKey,
+    label: "Threads",
+    color: "#000000",
+    icon: <Twitter size={20} />,
+  },
+];
+
+export default function SocialButtons({ networks, onToggle, loadingId }: Props) {
+  return (
+    <div className="space-y-3">
+      {NETWORKS.map((net) => {
+        const found = networks.find((n) => n.network === net.key);
+        const active = found?.is_connected ?? false;
+
+        return (
+          <NetworkButton
+            key={net.key}
+            icon={net.icon}
+            label={net.label}
+            active={active}
+            color={net.color}
+            loading={loadingId === net.key}
+            onClick={() => onToggle(net.key, active)}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+
+📌 FILE: hooks/useNetworks.ts
+----------------------------------------------
+"use client";
+
+import { useEffect, useState } from "react";
+import { getNetworksByProfile, toggleNetwork } from "@/lib/supabase/networks";
+import { NetworkAccount } from "@/types/NetworkAccount";
+import { NetworkKey } from "@/types/NetworkKey";
+
+export function useNetworks(profileId: string | null) {
+  const [networks, setNetworks] = useState<NetworkAccount[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const load = async () => {
+    if (!profileId) {
+      setNetworks([]);
+      return;
+    }
+
+    setLoading(true);
+    const data = await getNetworksByProfile(profileId);
+    setNetworks(data);
+    setLoading(false);
+  };
+
+  // NOTA: ignoramos "current", pero lo aceptamos por compatibilidad con la UI
+  const toggle = async (network: NetworkKey, _current?: boolean) => {
+    if (!profileId) return;
+
+    await toggleNetwork(profileId, network);
+    await load(); // refrescar UI luego del update
+  };
+
+  useEffect(() => {
+    load();
+  }, [profileId]);
+
+  return { networks, loading, toggle, reload: load };
+}
+
+
+📌 FILE: lib/supabase/networks.ts
+----------------------------------------------
+import { supabase } from "./client";
+import { NetworkKey } from "@/types/NetworkKey";
+import { NetworkAccount } from "@/types/NetworkAccount";
+
+// =======================================
+// OBTENER LISTA DE REDES PARA EL PERFIL
+// =======================================
+export async function getNetworksByProfile(
+  profileId: string
+): Promise<NetworkAccount[]> {
+  const { data, error } = await supabase
+    .from("profile_network_accounts")
+    .select("*")
+    .eq("profile_id", profileId);
+
+  if (error) {
+    console.error("❌ Error obteniendo redes:", error);
+    return [];
+  }
+
+  return data || [];
+}
+
+// =======================================
+// 🔥 TOGGLE ROBUSTO (usa datos REALES DE BD)
+// =======================================
+export async function toggleNetwork(
+  profileId: string,
+  network: NetworkKey
+) {
+  try {
+    // 1) Buscar registro existente
+    const { data: existing, error: searchError } = await supabase
+      .from("profile_network_accounts")
+      .select("*")
+      .eq("profile_id", profileId)
+      .eq("network", network)
+      .maybeSingle();
+
+    if (searchError) {
+      console.error("❌ Error buscando la red:", searchError);
+      return;
+    }
+
+    // 2) No existe → crearlo conectado
+    if (!existing) {
+      const { error: insertErr } = await supabase
+        .from("profile_network_accounts")
+        .insert({
+          profile_id: profileId,
+          network,
+          is_connected: true,
+        });
+
+      if (insertErr) console.error("❌ Error insertando:", insertErr);
+      return;
+    }
+
+    // 3) Existe → togglear usando SU valor actual
+    const newState = !existing.is_connected;
+
+    const { error: updateError } = await supabase
+      .from("profile_network_accounts")
+      .update({ is_connected: newState })
+      .eq("id", existing.id);
+
+    if (updateError) {
+      console.error("❌ Error actualizando:", updateError);
+    }
+
+  } catch (error) {
+    console.error("❌ Error inesperado en toggleNetwork:", error);
+  }
+}
+
+
+📌 FILE: types/NetworkAccount.ts
+----------------------------------------------
+import { NetworkKey } from "./NetworkKey";
+
+export interface NetworkAccount {
+  id: string;
+  profile_id: string;
+  network: NetworkKey;
+  is_connected: boolean;
+  access_token?: string | null;
+  extra_data?: any;
+  created_at: string;
+}
+
+
+📌 FILE: types/NetworkKey.ts
+----------------------------------------------
+export type NetworkKey =
+  | "instagram"
+  | "facebook"
+  | "tiktok"
+  | "linkedin"
+  | "threads";
+
+
+📌 FILE: hooks/useProfiles.ts
+----------------------------------------------
+"use client";
+
+import { useEffect, useState } from "react";
+import {
+  getProfilesByUser,
+  createProfile,
+  deleteProfile,
+  countConnectedNetworks,
+} from "@/lib/supabase/profiles";
+import { Profile } from "@/types/Profile";
+
+export function useProfiles(userId: string | null) {
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [selected, setSelected] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    if (!userId) return;
+
+    const raw = await getProfilesByUser(userId);
+
+    const withCounts = await Promise.all(
+      raw.map(async (p) => ({
+        ...p,
+        connected_count: await countConnectedNetworks(p.id),
+      }))
+    );
+
+    setProfiles(withCounts);
+
+    // 🔥 Si no hay perfiles, limpiar selección y detener
+    if (withCounts.length === 0) {
+      setSelected(null);
+      setLoading(false);
+      return;
+    }
+
+    // 🔥 Solo seleccionar automáticamente si no había selección previa
+    if (!selected) {
+      setSelected(withCounts[0]);
+    }
+
+    setLoading(false);
+  };
+
+  const addProfile = async (name: string) => {
+    if (!userId) return;
+    await createProfile(userId, name);
+    await load();
+  };
+
+  const removeProfile = async (id: string) => {
+    await deleteProfile(id);
+
+    const newList = profiles.filter((p) => p.id !== id);
+    setProfiles(newList);
+
+    // 🔥 Si no queda ningún perfil, no crear nada automático
+    if (newList.length === 0) {
+      setSelected(null);
+      return;
+    }
+
+    // 🔥 Si eliminaste el perfil seleccionado, seleccionar otro
+    if (selected?.id === id) {
+      setSelected(newList[0]);
+    }
+  };
+
+  useEffect(() => {
+    load();
+  }, [userId]);
+
+  return {
+    profiles,
+    selected,
+    setSelected,
+    loading,
+    addProfile,
+    removeProfile,
+    reload: load,
+  };
+}
+
+
+📌 FILE: app/dashboard/components/ProfileSidebar/ProfileSidebar.tsx
+----------------------------------------------
+"use client";
+
+import { useState } from "react";
+import { Profile } from "@/types/Profile";
+import ProfileCard from "./ProfileCard";
+
+interface Props {
+  profiles: Profile[];
+  selected: Profile | null;
+  onSelect: (p: Profile) => void;
+  onCreate: (name: string) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
+}
+
+export default function ProfileSidebar({
+  profiles,
+  selected,
+  onSelect,
+  onCreate,
+  onDelete,
+}: Props) {
+  const [name, setName] = useState("");
+  const [creating, setCreating] = useState(false); // 🔥 para spinner/disabled
+
+  const handleCreate = async () => {
+    if (!name.trim() || creating) return;
+
+    setCreating(true);
+    await onCreate(name.trim());
+    setName("");
+    setCreating(false);
+  };
+
+  return (
+    <div className="space-y-6">
+
+      {/* Crear perfil */}
+      <div className="bg-white/80 backdrop-blur p-5 rounded-xl shadow-sm border border-gray-100">
+        <h2 className="text-xl font-semibold mb-3">Crear nuevo perfil</h2>
+
+        <div className="flex gap-3">
+          <input
+            type="text"
+            placeholder="Ej: MonoMijin, Negocio..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleCreate(); // 🔥 ENTER crea
+            }}
+            className="border p-2 rounded-xl w-full focus:ring-2 focus:ring-blue-400 outline-none"
+          />
+
+          <button
+            onClick={handleCreate}
+            disabled={creating}
+            className={`
+              bg-blue-600 text-white px-4 rounded-xl transition
+              hover:bg-blue-700 
+              ${creating ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
+            `}
+          >
+            {creating ? (
+              <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              "Crear"
+            )}
+          </button>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold">Tus perfiles</h2>
+
+      <div className="space-y-3">
+        {profiles.map((p) => (
+          <ProfileCard
+            key={p.id}
+            profile={p}
+            selected={selected?.id === p.id}
+            onClick={() => onSelect(p)}
+            onDelete={() => onDelete(p.id)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+📌 FILE: app/dashboard/components/ProfileSidebar/ProfileCard.tsx
+----------------------------------------------
+// app/dashboard/components/ProfileSidebar/ProfileCard.tsx
+
+"use client";
+
+import { useState } from "react";
+import { Profile } from "@/types/Profile";
+import { Trash2, Loader2 } from "lucide-react";
+
+interface Props {
+  profile: Profile;
+  selected: boolean;
+  onClick: () => void;
+  onDelete: () => void;
+}
+
+export default function ProfileCard({
+  profile,
+  selected,
+  onClick,
+  onDelete,
+}: Props) {
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // evitar seleccionar al borrar
+
+    if (deleting) return;
+
+    const ok = confirm(`¿Seguro que deseas eliminar el perfil "${profile.profile_name}"?`);
+    if (!ok) return;
+
+    setDeleting(true);
+    await onDelete();
+    setDeleting(false);
+  };
+
+  return (
+    <div
+      onClick={() => {
+        if (!deleting) onClick();
+      }}
+      className={`
+        group p-4 rounded-xl border cursor-pointer select-none
+        transition-all duration-200 shadow-sm
+        hover:shadow-md hover:bg-gray-50
+        ${selected ? "border-blue-500 bg-blue-50" : "border-gray-200 bg-white"}
+        ${deleting ? "opacity-60 pointer-events-none" : ""}
+      `}
+    >
+      <div className="flex justify-between items-center">
+        <p className="text-lg font-semibold">{profile.profile_name}</p>
+
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          className={`
+            p-2 rounded-lg transition
+            ${deleting ? "text-gray-400" : "text-red-500 hover:bg-red-100"}
+          `}
+        >
+          {deleting ? (
+            <Loader2 size={16} className="animate-spin" />
+          ) : (
+            <Trash2 size={16} />
+          )}
+        </button>
+      </div>
+
+      <p className="text-sm text-gray-500 mt-1">
+        Redes conectadas: <b>{profile.connected_count ?? 0}</b>
+      </p>
+    </div>
+  );
+}
+
+
+
+=== FIN ===
+
