@@ -1,6 +1,11 @@
 .
 ├── app
+│   ├── auth
+│   │   └── callback
+│   │       └── route.ts
 │   ├── dashboard
+│   │   ├── components
+│   │   │   └── SocialButtons.tsx
 │   │   └── page.tsx
 │   ├── favicon.ico
 │   ├── globals.css
@@ -11,15 +16,16 @@
 │   └── register
 │       └── page.tsx
 ├── arbol.txt
+├── debugFiles.js
 ├── eslint.config.mjs
 ├── lib
 │   └── supabaseClient.ts
-├── middleware.ts
+├── middleware_backup.ts
 ├── next.config.ts
 ├── next-env.d.ts
 ├── package.json
 ├── package-lock.json
-├── postcss.config.mjs
+├── postcss.config.js
 ├── public
 │   ├── file.svg
 │   ├── globe.svg
@@ -27,6 +33,7 @@
 │   ├── vercel.svg
 │   └── window.svg
 ├── README.md
+├── tailwind.config.js
 └── tsconfig.json
 
-6 directories, 23 files
+9 directories, 27 files

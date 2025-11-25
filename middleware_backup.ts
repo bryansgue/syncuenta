@@ -14,6 +14,16 @@ export async function middleware(req: NextRequest) {
 
   console.log("🟦 Sesión:", session ? "Existe" : "NO existe");
 
+  // 👉 EXCLUIR rutas donde OAuth regresa
+  if (
+    req.nextUrl.pathname.startsWith("/login") ||
+    req.nextUrl.pathname.startsWith("/auth/")
+  ) {
+    console.log("⏭ Saltando middleware para ruta de OAuth/Login");
+    return res;
+  }
+
+  // 👉 Proteger solo dashboard
   if (req.nextUrl.pathname.startsWith("/dashboard")) {
     if (!session) {
       console.log("🔴 No autenticado → redirigiendo a /login");
@@ -28,8 +38,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/dashboard/:path*",
-  ],
+  matcher: ["/dashboard/:path*"],
 };
-

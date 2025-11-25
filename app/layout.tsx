@@ -1,12 +1,16 @@
+import "./globals.css";
+
 export const metadata = {
-  title: 'Syncuenta',
-  description: 'Sistema básico con Next.js + Supabase',
+  title: "Syncuenta",
+  description: "Publica tu contenido en todas tus redes",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body className="bg-gray-50 text-gray-900">
+        {children}
+      </body>
     </html>
   );
 }
