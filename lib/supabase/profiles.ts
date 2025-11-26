@@ -39,3 +39,17 @@ export async function countConnectedNetworks(profileId: string): Promise<number>
 
   return count || 0;
 }
+
+
+export async function renameProfile(id: string, userId: string, newName: string) {
+  const { error } = await supabase
+    .from("profiles_social")
+    .update({ profile_name: newName })
+    .eq("id", id)
+    .eq("user_id", userId); // 🔥 obligatorio
+
+  if (error) {
+    console.error("❌ Error renombrando perfil:", error);
+  }
+}
+

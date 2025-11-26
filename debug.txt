@@ -1,0 +1,162 @@
+
+=====================================
+🔍   ARCHIVOS CRÍTICOS DEL PROYECTO
+=====================================
+
+
+📌 FILE: app_v2/layout.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/data/user.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/lib/supabase/server.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/providers/UserProvider.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/providers/SupabaseProvider.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/providers/ReactQueryProvider.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/providers/ThemeProvider.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(auth)/layout.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(auth)/login/page.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(auth)/register/page.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(auth)/forgot-password/page.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(public)/layout.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(public)/page.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/layout.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/dashboard/page.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/networks/page.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/networks/components/NetworkButton.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/networks/components/NetworksGrid.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/networks/components/NetworkStatusBadge.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/profiles/page.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/profiles/components/ProfileList.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/profiles/components/CreateProfileModal.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/profiles/components/EditProfileModal.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/settings/page.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/settings/components/DangerZone.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/settings/components/PreferencesForm.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/settings/components/AccountSecurityForm.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/settings/components/ProfileSettingsForm.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/settings/components/SettingsSidebar.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/ai/assistants/page.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/ai/assistants/components/AssistantCard.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/ai/assistants/components/ChatThread.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/ai/assistants/components/PromptInput.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/ai/automations/page.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/ai/automations/components/TriggerForm.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/ai/automations/components/ActionForm.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/(private)/ai/automations/components/WorkflowCard.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/utils/auth-helpers.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/utils/cookies.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/utils/format.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/utils/types.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/utils/validators.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/api/auth/route.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/api/networks/toggle/route.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/api/profiles/create/route.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/api/profiles/update/route.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/api/profiles/delete/route.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/api/ai/completion/route.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/api/ai/generate-image/route.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/api/ai/sentiment/route.ts
+❌ Archivo no encontrado
+
+📌 FILE: app_v2/page.tsx
+❌ Archivo no encontrado
+
+
+=== FIN DE LECTURA ===
+

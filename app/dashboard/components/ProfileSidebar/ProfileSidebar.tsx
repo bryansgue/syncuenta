@@ -10,6 +10,7 @@ interface Props {
   onSelect: (p: Profile) => void;
   onCreate: (name: string) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
+  onEdit: (id: string, newName: string) => Promise<void>; 
 }
 
 export default function ProfileSidebar({
@@ -18,6 +19,7 @@ export default function ProfileSidebar({
   onSelect,
   onCreate,
   onDelete,
+  onEdit,
 }: Props) {
   const [name, setName] = useState("");
   const [creating, setCreating] = useState(false);
@@ -84,6 +86,7 @@ export default function ProfileSidebar({
             selected={selected?.id === p.id}
             onClick={() => onSelect(p)}
             onDelete={() => onDelete(p.id)}
+            onEdit={(newName) => onEdit(p.id, newName)}
           />
         ))}
       </div>

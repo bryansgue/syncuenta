@@ -13,7 +13,6 @@
 │   │   │   │   └── ProfileSidebar.tsx
 │   │   │   └── SocialButtons.tsx
 │   │   ├── header.tsx
-│   │   ├── layout.tsx
 │   │   ├── page.tsx
 │   │   └── sidebar.tsx
 │   ├── favicon.ico
@@ -22,15 +21,157 @@
 │   ├── login
 │   │   └── page.tsx
 │   ├── page.tsx
-│   └── register
+│   ├── register
+│   │   └── page.tsx
+│   └── settings
+│       ├── components
+│       │   ├── DangerZone.tsx
+│       │   ├── PlanSettings.tsx
+│       │   ├── PreferencesSettings.tsx
+│       │   ├── ProfileSettings.tsx
+│       │   ├── Section.tsx
+│       │   └── SecuritySettings.tsx
 │       └── page.tsx
+├── app_v2
+│   ├── api
+│   │   ├── ai
+│   │   │   ├── completion
+│   │   │   │   └── route.ts
+│   │   │   ├── generate-image
+│   │   │   │   └── route.ts
+│   │   │   └── sentiment
+│   │   │       └── route.ts
+│   │   ├── auth
+│   │   │   └── route.ts
+│   │   ├── networks
+│   │   │   └── toggle
+│   │   │       └── route.ts
+│   │   └── profiles
+│   │       ├── create
+│   │       │   └── route.ts
+│   │       ├── delete
+│   │       │   └── route.ts
+│   │       └── update
+│   │           └── route.ts
+│   ├── (auth)
+│   │   ├── forgot-password
+│   │   │   └── page.tsx
+│   │   ├── layout.tsx
+│   │   ├── login
+│   │   │   └── page.tsx
+│   │   └── register
+│   │       └── page.tsx
+│   ├── components
+│   │   ├── layout
+│   │   │   ├── AppFooter.tsx
+│   │   │   ├── AppHeader.tsx
+│   │   │   └── AppSidebar.tsx
+│   │   ├── shared
+│   │   │   ├── Avatar.tsx
+│   │   │   ├── Badge.tsx
+│   │   │   ├── Icon.tsx
+│   │   │   └── StateIndicator.tsx
+│   │   └── ui
+│   │       ├── Button.tsx
+│   │       ├── Card.tsx
+│   │       ├── Input.tsx
+│   │       ├── Modal.tsx
+│   │       ├── Select.tsx
+│   │       ├── Skeleton.tsx
+│   │       └── Tabs.tsx
+│   ├── data
+│   │   ├── ai.ts
+│   │   ├── networks.ts
+│   │   ├── profiles.ts
+│   │   ├── settings.ts
+│   │   ├── user.ts
+│   │   └── utils.ts
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── lib
+│   │   ├── openai.ts
+│   │   └── supabase
+│   │       ├── client.ts
+│   │       └── server.ts
+│   ├── page.tsx
+│   ├── (private)
+│   │   ├── ai
+│   │   │   ├── assistants
+│   │   │   │   ├── components
+│   │   │   │   │   ├── AssistantCard.tsx
+│   │   │   │   │   ├── ChatThread.tsx
+│   │   │   │   │   └── PromptInput.tsx
+│   │   │   │   └── page.tsx
+│   │   │   └── automations
+│   │   │       ├── components
+│   │   │       │   ├── ActionForm.tsx
+│   │   │       │   ├── TriggerForm.tsx
+│   │   │       │   └── WorkflowCard.tsx
+│   │   │       └── page.tsx
+│   │   ├── dashboard
+│   │   │   ├── components
+│   │   │   │   ├── DashboardHeader.tsx
+│   │   │   │   ├── ProfileSelector.tsx
+│   │   │   │   ├── QuickActions.tsx
+│   │   │   │   └── StatsCards.tsx
+│   │   │   └── page.tsx
+│   │   ├── layout.tsx
+│   │   ├── networks
+│   │   │   ├── components
+│   │   │   │   ├── NetworkButton.tsx
+│   │   │   │   ├── NetworksGrid.tsx
+│   │   │   │   └── NetworkStatusBadge.tsx
+│   │   │   └── page.tsx
+│   │   ├── page.tsx
+│   │   ├── profiles
+│   │   │   ├── components
+│   │   │   │   ├── CreateProfileModal.tsx
+│   │   │   │   ├── EditProfileModal.tsx
+│   │   │   │   └── ProfileList.tsx
+│   │   │   └── page.tsx
+│   │   └── settings
+│   │       ├── components
+│   │       │   ├── AccountSecurityForm.tsx
+│   │       │   ├── DangerZone.tsx
+│   │       │   ├── PreferencesForm.tsx
+│   │       │   ├── ProfileSettingsForm.tsx
+│   │       │   └── SettingsSidebar.tsx
+│   │       └── page.tsx
+│   ├── providers
+│   │   ├── ReactQueryProvider.tsx
+│   │   ├── SupabaseProvider.tsx
+│   │   ├── ThemeProvider.tsx
+│   │   └── UserProvider.tsx
+│   ├── (public)
+│   │   ├── components
+│   │   │   ├── CallToAction.tsx
+│   │   │   ├── FeaturesSection.tsx
+│   │   │   ├── HeroSection.tsx
+│   │   │   └── LandingHeader.tsx
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   └── utils
+│       ├── auth-helpers.ts
+│       ├── cookies.ts
+│       ├── format.ts
+│       ├── types.ts
+│       └── validators.ts
 ├── arbol.txt
 ├── components
+│   ├── Hero.tsx
+│   ├── HowItWorks.tsx
+│   ├── PricingSection.tsx
+│   ├── PrivateHeader.tsx
+│   ├── PrivateLayout.tsx
+│   ├── PublicHeader.tsx
+│   ├── Spinner.tsx
 │   └── ui
 │       ├── Button.tsx
 │       ├── Card.tsx
 │       └── Input.tsx
+├── debugFile2.js
 ├── debugFiles.js
+├── debug.txt
 ├── eslint.config.mjs
 ├── hooks
 │   ├── useNetworks.ts
@@ -47,11 +188,22 @@
 ├── package-lock.json
 ├── postcss.config.js
 ├── public
+│   ├── bluesky.svg
+│   ├── facebook.svg
 │   ├── file.svg
 │   ├── globe.svg
+│   ├── google.png
+│   ├── instagram.svg
+│   ├── linkedin.svg
 │   ├── next.svg
+│   ├── pinterest.svg
+│   ├── reddit.svg
+│   ├── threads.svg
+│   ├── tiktok.svg
 │   ├── vercel.svg
-│   └── window.svg
+│   ├── window.svg
+│   ├── x.svg
+│   └── youtube.svg
 ├── README.md
 ├── salida.txt
 ├── tailwind.config.js
@@ -61,4 +213,4 @@
     ├── NetworkKey.ts
     └── Profile.ts
 
-16 directories, 45 files
+60 directories, 153 files

@@ -4,6 +4,725 @@
 =====================================
 
 
+📌 FILE: next.config.ts
+----------------------------------------------
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  /* config options here */
+};
+
+export default nextConfig;
+
+
+📌 FILE: tailwind.config.js
+----------------------------------------------
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./app/**/*.{js,ts,jsx,tsx,mdx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+
+
+📌 FILE: tsconfig.json
+----------------------------------------------
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}
+
+
+📌 FILE: package.json
+----------------------------------------------
+{
+  "name": "syncuenta",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/supabase-js": "^2.84.0",
+    "framer-motion": "^12.23.24",
+    "lucide-react": "^0.554.0",
+    "next": "16.0.3",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "tailwindcss": "^4.1.17"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.22",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.3",
+    "typescript": "^5"
+  }
+}
+
+
+📌 FILE: postcss.config.js
+----------------------------------------------
+export default {
+  plugins: {
+    "@tailwindcss/postcss": {},
+    autoprefixer: {},
+  },
+};
+
+
+📌 FILE: eslint.config.mjs
+----------------------------------------------
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+
+
+📌 FILE: app/page.tsx
+----------------------------------------------
+"use client";
+
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { useState } from "react";
+import PublicHeader from "@/components/PublicHeader";
+import Hero from "@/components/Hero";
+import HowItWorks from "@/components/HowItWorks";
+import PricingSection from "@/components/PricingSection";
+
+
+
+export default function HomePage() {
+  const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
+
+  const prices = {
+    Free: billing === "monthly" ? "$0" : "$0",
+    Basic: billing === "monthly" ? "$12" : "$99",
+    Pro: billing === "monthly" ? "$29" : "$249",
+    Business: billing === "monthly" ? "$79" : "$649",
+  };
+
+  return (
+    <div 
+    className="min-h-screen bg-[#f8fafc] text-gray-800 overflow-hidden">
+      <PublicHeader />
+
+      
+
+
+      {/* HERO */}
+      <Hero /> 
+
+
+{/* HOW IT WORKS */}
+<HowItWorks />
+
+
+
+
+
+      
+
+
+      {/* FEATURES */}
+      <section id="features" className="py-32 bg-[#f9fafb]">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+
+          <h3 className="text-5xl font-extrabold mb-6">Características clave</h3>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-20">
+            Sincroniza, publica y automatiza tu contenido como nunca antes.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+
+            <FeatureCard 
+              title="Publicación con un clic"
+              desc="Publica tu contenido en varias redes conectadas al mismo tiempo."
+              footer="Ahorra tiempo publicando sin repetir procesos."
+            />
+
+            <FeatureCard 
+              title="Integración total"
+              desc="Compatibilidad con Instagram, TikTok, Facebook, LinkedIn y Threads."
+              footer="Multiplataforma desde un solo panel."
+            />
+
+            <FeatureCard 
+              title="Seguro y privado"
+              desc="Tu información está protegida con estándares modernos."
+              footer="Cumple con normas globales."
+            />
+
+          </div>
+        </div>
+      </section>
+
+
+      {/* PRICING */}
+      <PricingSection />
+
+      
+
+
+      {/* CTA */}
+      <section className="py-32 bg-gradient-to-br from-blue-600 to-purple-600 text-center text-white">
+        <h3 className="text-5xl font-extrabold">Miles de creadores usan Syncuenta</h3>
+        <p className="text-xl mt-4 opacity-90">
+          Ahorra tiempo y publica en tus redes desde un solo lugar.
+        </p>
+
+        <Link 
+          href="/register"
+          className="mt-10 inline-block px-12 py-5 bg-white text-blue-600 rounded-xl text-2xl font-bold shadow-xl transition transform hover:scale-[1.03]"
+        >
+          Comenzar gratis
+        </Link>
+      </section>
+
+
+      {/* FOOTER */}
+      <footer className="py-10 bg-gray-900 text-gray-300 text-center">
+        <p>© {new Date().getFullYear()} Syncuenta. Todos los derechos reservados.</p>
+        <p className="mt-2 text-sm opacity-70">support@syncuenta.com</p>
+      </footer>
+
+    </div>
+  );
+}
+
+
+
+/* --- SUBCOMPONENTS ---------------------- */
+
+function HowStep({ num, title, text }: any) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      viewport={{ once: true }}
+      className="flex flex-col items-center text-center"
+    >
+      <div className="
+        w-20 h-20 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 
+        text-white flex items-center justify-center text-3xl font-bold shadow-xl
+      ">
+        {num}
+      </div>
+      <h4 className="text-2xl font-bold mt-6">{title}</h4>
+      <p className="text-gray-600 mt-2 max-w-xs text-lg">{text}</p>
+    </motion.div>
+  );
+}
+
+
+function FeatureCard({ title, desc, footer }: any) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      viewport={{ once: true }}
+      className="p-8 rounded-2xl bg-white border border-gray-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition"
+    >
+      <h4 className="text-2xl font-bold mb-4">{title}</h4>
+      <p className="text-lg text-gray-600 mb-6">{desc}</p>
+      <p className="text-blue-600 font-semibold">{footer}</p>
+    </motion.div>
+  );
+}
+
+
+function PricingCard({ name, price, features, highlight }: any) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      viewport={{ once: true }}
+      className={`
+        rounded-2xl p-8 shadow-lg border 
+        ${highlight 
+          ? "border-purple-600 shadow-purple-300 scale-[1.03] bg-white" 
+          : "border-gray-200 bg-white"
+        }
+        transition
+      `}
+    >
+      <h4 className="text-3xl font-bold">{name}</h4>
+
+      <p className="
+        text-4xl font-extrabold mt-4 
+        bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text
+      ">
+        {price}
+      </p>
+
+      <ul className="text-left mt-8 space-y-3">
+        {features.map((f: string, i: number) => (
+          <li key={i} className="text-gray-700 flex items-start gap-2">
+            ✔ <span>{f}</span>
+          </li>
+        ))}
+      </ul>
+
+      <Link 
+        href="/register"
+        className={`
+          block text-center mt-10 py-3 rounded-xl font-semibold
+          ${highlight 
+            ? "bg-purple-600 text-white hover:bg-purple-700" 
+            : "bg-gray-100 hover:bg-gray-200 text-gray-700"}
+          transition
+        `}
+      >
+        Probar gratis
+      </Link>
+    </motion.div>
+  );
+}
+
+
+
+📌 FILE: app/layout.tsx
+----------------------------------------------
+import "./globals.css";
+
+export const metadata = {
+  title: "Syncuenta",
+  description: "Publica tu contenido en todas tus redes",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="es">
+      <body className="bg-gray-50 text-gray-900">
+        {children}
+      </body>
+    </html>
+  );
+}
+
+
+📌 FILE: app/globals.css
+----------------------------------------------
+@import "tailwindcss";
+
+
+📌 FILE: app/auth/callback/route.ts
+----------------------------------------------
+import { cookies } from "next/headers";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { NextResponse } from "next/server";
+
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const code = url.searchParams.get("code");
+
+  console.log("🔵 Callback recibido. code =", code);
+
+  // Si no hay código → no hay forma de intercambiar sesión
+  if (!code) {
+    console.log("❌ No se recibió código OAuth");
+    return NextResponse.redirect("http://localhost:3000/login");
+  }
+
+  const supabase = createRouteHandlerClient({ cookies });
+
+  // Intercambiar el código por una sesión
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+
+  console.log("🟣 Intercambio de código:", { data, error });
+
+  if (error) {
+    console.error("❌ Error al intercambiar código:", error.message);
+    return NextResponse.redirect("http://localhost:3000/login");
+  }
+
+  console.log("🟢 Sesión creada correctamente. Redirigiendo a dashboard…");
+
+  return NextResponse.redirect("http://localhost:3000/dashboard");
+}
+
+
+📌 FILE: app/login/page.tsx
+----------------------------------------------
+"use client";
+
+import { useState } from "react";
+import { supabase } from "@/lib/supabase/client";
+import { motion } from "framer-motion";
+import Link from "next/link";
+
+export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    setLoading(false);
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    window.location.href = "/dashboard";
+  };
+
+  const loginWithGoogle = async () => {
+    setError("");
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo:
+          process.env.NODE_ENV === "production"
+            ? "https://tudominio.com/dashboard"
+            : "http://localhost:3000/dashboard",
+      },
+    });
+
+    if (error) setError(error.message);
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-white px-6">
+
+      {/* CARD */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="
+          bg-white p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-200
+        "
+      >
+        <h1 className="text-3xl font-extrabold text-center mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Syncuenta
+        </h1>
+
+        <p className="text-center text-gray-600 mb-8">
+          Inicia sesión para acceder a tu panel
+        </p>
+
+        {error && (
+          <p className="text-red-600 text-center mb-4 font-medium">{error}</p>
+        )}
+
+        {/* LOGIN FORM */}
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input
+            type="email"
+            placeholder="tu@correo.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="
+              w-full border border-gray-300 rounded-xl p-3 
+              focus:outline-none focus:ring-2 focus:ring-blue-500
+            "
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Tu contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="
+              w-full border border-gray-300 rounded-xl p-3 
+              focus:outline-none focus:ring-2 focus:ring-blue-500
+            "
+            required
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="
+              w-full bg-blue-600 text-white rounded-xl p-3 font-semibold
+              hover:bg-blue-700 transition 
+              disabled:opacity-50 disabled:cursor-not-allowed
+            "
+          >
+            {loading ? "Ingresando..." : "Entrar"}
+          </button>
+        </form>
+
+        {/* DIVIDER */}
+        <div className="flex items-center my-6">
+          <div className="flex-1 h-px bg-gray-300"></div>
+          <span className="px-3 text-gray-500">o</span>
+          <div className="flex-1 h-px bg-gray-300"></div>
+        </div>
+
+        {/* GOOGLE LOGIN */}
+        <button
+          onClick={loginWithGoogle}
+          className="w-full bg-white border border-gray-300 p-3 rounded-xl shadow-sm 
+                     hover:bg-gray-50 flex items-center justify-center gap-2 text-gray-700 font-medium transition"
+        >
+          <img src="/google.svg" className="w-5 h-5" />
+          Iniciar sesión con Google
+        </button>
+
+        {/* REGISTER */}
+        <p className="text-center mt-6 text-gray-600">
+          ¿No tienes cuenta?{" "}
+          <Link
+            href="/register"
+            className="text-blue-600 font-semibold hover:underline"
+          >
+            Crear cuenta
+          </Link>
+        </p>
+      </motion.div>
+    </div>
+  );
+}
+
+
+📌 FILE: app/register/page.tsx
+----------------------------------------------
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { supabase } from "@/lib/supabase/client";
+
+export default function RegisterPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState(false);
+
+  const handleRegister = async (e: any) => {
+    e.preventDefault();
+    setError("");
+    setMessage("");
+    setLoading(true);
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: name },
+      }
+    });
+
+    setLoading(false);
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    setMessage(
+      "Registro exitoso. Revisa tu correo para confirmar tu cuenta antes de iniciar sesión."
+    );
+  };
+
+  const registerWithGoogle = async () => {
+    setOauthLoading(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`
+      }
+    });
+
+    if (error) {
+      setError(error.message);
+      setOauthLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#f8fafc] px-4">
+
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md bg-white p-10 rounded-2xl shadow-lg border border-gray-200"
+      >
+        <h1 className="text-3xl font-extrabold text-center mb-2 text-gray-900">
+          Crear cuenta{" "}
+          <span
+            className="
+              bg-gradient-to-r from-blue-600 to-purple-600
+              text-transparent bg-clip-text
+            "
+          >
+            Syncuenta
+          </span>
+        </h1>
+
+
+
+        <p className="text-gray-500 text-center mb-6">
+          Empieza gratis en menos de 1 minuto
+        </p>
+
+        {/* Mensajes */}
+        {error && (
+          <p className="text-red-600 mb-4 text-center font-medium">{error}</p>
+        )}
+        {message && (
+          <p className="text-green-600 mb-4 text-center font-medium">{message}</p>
+        )}
+
+        {/* -------- FORMULARIO NORMAL -------- */}
+        <form className="flex flex-col gap-4" onSubmit={handleRegister}>
+
+          <input
+            type="text"
+            placeholder="Tu nombre completo"
+            className="border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+
+          <input
+            type="email"
+            placeholder="Correo electrónico"
+            className="border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Contraseña"
+            className="border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="
+              bg-blue-600 text-white rounded-xl p-3 mt-2
+              font-semibold shadow hover:bg-blue-700 transition
+              disabled:opacity-50 disabled:cursor-not-allowed
+            "
+          >
+            {loading ? "Creando cuenta..." : "Registrarse"}
+          </button>
+        </form>
+
+        {/* OR divider */}
+        <div className="flex items-center my-6">
+          <div className="flex-1 h-px bg-gray-300"></div>
+          <span className="px-4 text-gray-500">o</span>
+          <div className="flex-1 h-px bg-gray-300"></div>
+        </div>
+
+        {/* -------- GOOGLE LOGIN -------- */}
+        <button
+          onClick={registerWithGoogle}
+          disabled={oauthLoading}
+          className="
+            w-full flex items-center justify-center gap-3
+            border border-gray-300 rounded-xl p-3 bg-white
+            hover:bg-gray-100 shadow-sm transition
+            font-medium text-gray-700
+            disabled:opacity-50 disabled:cursor-not-allowed
+          "
+        >
+          <img src="/google.png" className="w-5 h-5" />
+          {oauthLoading ? "Conectando..." : "Continuar con Google"}
+        </button>
+
+        {/* Login link */}
+        <p className="mt-5 text-center text-gray-700">
+          ¿Ya tienes cuenta?{" "}
+          <Link
+            href="/login"
+            className="text-blue-600 font-medium hover:underline"
+          >
+            Iniciar sesión
+          </Link>
+        </p>
+      </motion.div>
+    </div>
+  );
+}
+
+
 📌 FILE: app/dashboard/page.tsx
 ----------------------------------------------
 "use client";
@@ -16,6 +735,8 @@ import NetworksPanel from "./components/NetworksPanel/NetworksPanel";
 
 import { useProfiles } from "@/hooks/useProfiles";
 import { useNetworks } from "@/hooks/useNetworks";
+import PrivateLayout from "@/components/PrivateLayout";
+import Spinner from "@/components/Spinner";
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
@@ -29,6 +750,7 @@ export default function DashboardPage() {
     loading: loadingProfiles,
     addProfile,
     removeProfile,
+    editProfile,
     reload: reloadProfiles,
   } = useProfiles(user?.id || null);
 
@@ -41,7 +763,9 @@ export default function DashboardPage() {
   // ===== LOAD USER SESSION =====
   useEffect(() => {
     const load = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
       if (!session) {
         window.location.href = "/login";
@@ -62,102 +786,413 @@ export default function DashboardPage() {
     }
   }, [selected]);
 
-  if (loading || loadingProfiles) {
-    return <p className="p-10 text-lg">Cargando...</p>;
+  const isLoading = loading || loadingProfiles;
+
+  // 🚀 MEJORA CRÍTICA
+  // Bloquea la pantalla hasta tener user REAL
+  // Evita cargas dobles e inconsistencias
+  if (!user) {
+    return (
+      <PrivateLayout>
+        <div className="min-h-screen flex justify-center items-center">
+          <Spinner />
+        </div>
+      </PrivateLayout>
+    );
   }
 
   // ===== COUNT CONNECTED NETWORKS =====
   const connectedNetworks = networks.filter((n) => n.is_connected).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-10 flex justify-center">
-      
-      <div className="
-        w-full max-w-6xl 
-        bg-white/60 backdrop-blur-xl 
-        rounded-2xl shadow-2xl 
-        p-10 border border-gray-200
-      ">
+    <PrivateLayout>
+      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-10 flex justify-center">
+        <div
+          className="
+            w-full max-w-6xl 
+            bg-white/60 backdrop-blur-xl 
+            rounded-2xl shadow-2xl 
+            p-10 border border-gray-200
+          "
+        >
+          {/* ================= HEADER SALUDO + CHECKLIST ================= */}
+          <div className="flex items-center justify-between mb-10">
+            {/* SALUDO */}
+            <h1 className="text-3xl font-bold text-gray-800">
+              Bienvenido {user?.email}
+            </h1>
 
-        {/* ================= HEADER SALUDO + CHECKLIST ================= */}
-        <div className="flex items-center justify-between mb-10">
-
-          {/* SALUDO */}
-          <h1 className="text-3xl font-bold text-gray-800">
-            Bienvenido {user?.email}
-          </h1>
-
-          {/* CHECKLIST + IR A PUBLICAR */}
-          <div className="flex items-center gap-6">
-
-            {/* CHECKLIST */}
-            <div className="flex items-center gap-5 bg-blue-50 border border-blue-200 px-5 py-3 rounded-xl shadow-sm">
-
-              <div className="flex items-center gap-2 text-gray-700 text-sm font-medium">
-                <span className="text-green-600">✔</span> Crear perfil
+            {/* CHECKLIST + IR A PUBLICAR */}
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-5 bg-blue-50 border border-blue-200 px-5 py-3 rounded-xl shadow-sm">
+                <div className="flex items-center gap-2 text-gray-700 text-sm font-medium">
+                  <span className="text-green-600">✔</span> Crear perfil
+                </div>
+                <div className="flex items-center gap-2 text-gray-700 text-sm font-medium">
+                  <span className="text-green-600">✔</span> Conectar redes
+                </div>
+                <div className="flex items-center gap-2 text-gray-700 text-sm font-medium">
+                  <span className="text-green-600">✔</span> Listo
+                </div>
               </div>
 
-              <div className="flex items-center gap-2 text-gray-700 text-sm font-medium">
-                <span className="text-green-600">✔</span> Conectar redes
+              <a
+                href="/dashboard/publish"
+                className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition shadow font-medium"
+              >
+                Ir a publicar
+              </a>
+            </div>
+          </div>
+
+          {/* ================= GRID ================= */}
+          {isLoading ? (
+            <div className="w-full flex justify-center py-20">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+              {/* === LEFT PANEL (Profiles) === */}
+              <div
+                className="
+                  bg-white/80 backdrop-blur 
+                  p-8 rounded-xl shadow-lg 
+                  border border-gray-200
+                "
+              >
+                <ProfileSidebar
+                  profiles={profiles}
+                  selected={selected}
+                  onSelect={(p) => setSelected(p)}
+                  onCreate={async (name) => {
+                    await addProfile(name);
+                    await reloadProfiles();
+                  }}
+                  onDelete={async (id) => {
+                    await removeProfile(id);
+                    await reloadProfiles();
+                  }}
+                  onEdit={async (id, newName) => {
+                    await editProfile(id, newName);
+                  }}
+                />
               </div>
 
-              <div className="flex items-center gap-2 text-gray-700 text-sm font-medium">
-                <span className="text-green-600">✔</span> Listo
+              {/* === RIGHT PANEL (Networks) === */}
+              <div
+                className="
+                  bg-white/80 backdrop-blur 
+                  rounded-xl shadow-lg border border-gray-200
+                  p-10
+                  w-full
+                "
+              >
+                <NetworksPanel
+                  profile={selected}
+                  networks={networks}
+                  onToggle={toggle}
+                />
               </div>
             </div>
+          )}
+        </div>
+      </div>
+    </PrivateLayout>
+  );
+}
 
-            {/* BOTÓN IR A PUBLICAR */}
-            <a
-              href="/dashboard/publish"
-              className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition shadow font-medium"
+
+📌 FILE: app/dashboard/header.tsx
+----------------------------------------------
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { supabase } from "@/lib/supabase/client";
+import {
+  Home,
+  Share2,
+  User,
+  Layers,
+  Settings,
+  LogOut,
+  Bell,
+  Search,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+
+export default function PrivateHeader() {
+  const pathname = usePathname();
+  const [user, setUser] = useState<any>(null);
+
+  // Load user
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+  }, []);
+
+  const isActive = (href: string) =>
+    pathname === href
+      ? "bg-blue-600 text-white shadow-sm"
+      : "text-gray-600 hover:bg-gray-100";
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/login";
+  };
+
+  return (
+    <header
+      className="
+        w-full bg-white 
+        border-b border-gray-100 
+        shadow-[0_1px_3px_rgba(0,0,0,0.04)]
+        h-16 flex items-center
+      "
+    >
+      <div className="w-full max-w-7xl mx-auto px-8 flex items-center justify-between">
+
+        {/* LEFT: Logo + Navigation */}
+        <div className="flex items-center gap-10">
+
+          {/* LOGO */}
+          <Link href="/dashboard" className="text-3xl font-extrabold select-none">
+            <span
+              className="
+                bg-gradient-to-r from-blue-600 to-purple-600
+                bg-clip-text text-transparent
+              "
             >
-              Ir a publicar
-            </a>
+              Syncuenta
+            </span>
+          </Link>
 
-          </div>
+          {/* NAV LINKS */}
+          <nav className="flex items-center gap-2">
+            <Link href="/dashboard" className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${isActive("/dashboard")}`}>
+              <Home size={18} /> Dashboard
+            </Link>
+
+            <Link href="/dashboard/publish" className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${isActive("/dashboard/publish")}`}>
+              <Share2 size={18} /> Publicar
+            </Link>
+
+            <Link href="/dashboard/profiles" className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${isActive("/dashboard/profiles")}`}>
+              <User size={18} /> Perfiles
+            </Link>
+
+            <Link href="/dashboard/networks" className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${isActive("/dashboard/networks")}`}>
+              <Layers size={18} /> Redes
+            </Link>
+
+            <Link href="/dashboard/settings" className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${isActive("/dashboard/settings")}`}>
+              <Settings size={18} /> Configuración
+            </Link>
+          </nav>
+
         </div>
 
-        {/* ================= GRID ================= */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        {/* RIGHT: Search + Notifications + User */}
+        <div className="flex items-center gap-6">
 
-          {/* === LEFT PANEL (Profiles) === */}
-          <div className="
-            bg-white/80 backdrop-blur 
-            p-8 rounded-xl shadow-lg 
-            border border-gray-200
-          ">
-            <ProfileSidebar
-              profiles={profiles}
-              selected={selected}
-              onSelect={(p) => setSelected(p)}
-              onCreate={async (name) => {
-                await addProfile(name);
-                await reloadProfiles();
-              }}
-              onDelete={async (id) => {
-                await removeProfile(id);
-                await reloadProfiles();
-              }}
+          {/* SEARCH */}
+          <div className="hidden md:flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-lg w-64">
+            <Search size={18} className="text-gray-500" />
+            <input
+              placeholder="Buscar..."
+              className="bg-transparent outline-none w-full text-sm"
             />
           </div>
 
-          {/* === RIGHT PANEL (Networks) === */}
-          <div className="
-            bg-white/80 backdrop-blur 
-            rounded-xl shadow-lg border border-gray-200
-            p-10
-            w-full
-          ">
-            <NetworksPanel
-              profile={selected}
-              networks={networks}
-              onToggle={toggle}
-            />
+          {/* NOTIFICATIONS */}
+          <button className="relative hover:opacity-80">
+            <Bell size={20} className="text-gray-600" />
+            <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+          </button>
+
+          {/* USER */}
+          <div className="flex items-center gap-3 pr-4">
+            <div
+              className="
+                w-9 h-9 rounded-full bg-gray-100 
+                flex items-center justify-center 
+                text-sm font-semibold text-gray-700 
+                border border-gray-300 overflow-hidden
+              "
+            >
+              {user?.user_metadata?.avatar_url ? (
+                <img
+                  src={user.user_metadata.avatar_url}
+                  className="w-full h-full object-cover"
+                  alt="avatar"
+                />
+              ) : (
+                <span>{(user?.email?.[0] || "U").toUpperCase()}</span>
+              )}
+            </div>
+
+            <div className="text-sm leading-tight hidden md:block">
+              <p className="font-semibold">{user?.email}</p>
+              <p className="text-gray-500 text-xs">Cuenta activa</p>
+            </div>
+
+            {/* LOGOUT */}
+            <button
+              onClick={logout}
+              className="hover:bg-gray-100 p-2 rounded-lg text-red-600 transition"
+            >
+              <LogOut size={18} />
+            </button>
           </div>
 
         </div>
       </div>
+    </header>
+  );
+}
 
+
+📌 FILE: app/dashboard/layout.tsx
+❌ Archivo no encontrado
+
+📌 FILE: app/dashboard/sidebar.tsx
+----------------------------------------------
+"use client";
+
+import { usePathname } from "next/navigation";
+import { Home, Share2, User, Layers, Settings, LogOut } from "lucide-react";
+import { supabase } from "@/lib/supabase/client";
+import Link from "next/link";
+
+const links = [
+  { href: "/dashboard", label: "Dashboard", icon: Home },
+  { href: "/dashboard/publish", label: "Publicar", icon: Share2 },
+  { href: "/dashboard/profiles", label: "Perfiles", icon: User },
+  { href: "/dashboard/networks", label: "Redes", icon: Layers },
+  { href: "/dashboard/settings", label: "Configuración", icon: Settings },
+];
+
+export default function Sidebar() {
+  const pathname = usePathname();
+
+  return (
+    <aside className="w-64 bg-white shadow-sm p-6 flex flex-col border-r border-gray-100">
+      
+      {/* LOGO */}
+      <h1 className="text-3xl font-bold mb-10 tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        Syncuenta
+      </h1>
+
+      {/* LINKS */}
+      <nav className="flex-1 space-y-1">
+        {links.map(({ href, label, icon: Icon }) => {
+          const active = pathname === href;
+
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={`flex items-center gap-3 px-3 py-2 rounded-md transition font-medium
+                ${active ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 hover:bg-gray-100"}
+              `}
+            >
+              <Icon size={18} />
+              {label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* LOGOUT */}
+      <button
+        onClick={async () => {
+          await supabase.auth.signOut();
+          window.location.href = "/login";
+        }}
+        className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 transition text-red-600 font-medium mt-6"
+      >
+        <LogOut size={18} />
+        Cerrar sesión
+      </button>
+
+    </aside>
+  );
+}
+
+
+📌 FILE: app/dashboard/components/SocialButtons.tsx
+----------------------------------------------
+"use client";
+
+import { NetworkKey } from "@/types/NetworkKey";
+import { NetworkAccount } from "@/types/NetworkAccount";
+import NetworkButton from "./NetworksPanel/NetworkButton";
+
+import {
+  Instagram,
+  Facebook,
+  Linkedin,
+  Twitter,
+  Hexagon,
+} from "lucide-react";
+
+interface Props {
+  networks: NetworkAccount[];
+  onToggle: (key: NetworkKey, current: boolean) => void;
+  loadingId?: NetworkKey | null;
+}
+
+const NETWORKS = [
+  {
+    key: "instagram" as NetworkKey,
+    label: "Instagram",
+    color: "#E1306C",
+    icon: <Instagram size={20} />,
+  },
+  {
+    key: "facebook" as NetworkKey,
+    label: "Facebook",
+    color: "#1877F2",
+    icon: <Facebook size={20} />,
+  },
+  {
+    key: "tiktok" as NetworkKey,
+    label: "TikTok",
+    color: "#000000",
+    icon: <Hexagon size={20} />,
+  },
+  {
+    key: "linkedin" as NetworkKey,
+    label: "LinkedIn",
+    color: "#0A66C2",
+    icon: <Linkedin size={20} />,
+  },
+  {
+    key: "threads" as NetworkKey,
+    label: "Threads",
+    color: "#000000",
+    icon: <Twitter size={20} />,
+  },
+];
+
+export default function SocialButtons({ networks, onToggle, loadingId }: Props) {
+  return (
+    <div className="space-y-3">
+      {NETWORKS.map((net) => {
+        const found = networks.find((n) => n.network === net.key);
+        const active = found?.is_connected ?? false;
+
+        return (
+          <NetworkButton
+            key={net.key}
+            icon={net.icon}
+            label={net.label}
+            active={active}
+            color={net.color}
+            loading={loadingId === net.key}
+            onClick={() => onToggle(net.key, active)}
+          />
+        );
+      })}
     </div>
   );
 }
@@ -283,83 +1318,1361 @@ export default function NetworkButton({
 }
 
 
-📌 FILE: app/dashboard/components/SocialButtons.tsx
+📌 FILE: app/dashboard/components/ProfileSidebar/ProfileSidebar.tsx
 ----------------------------------------------
 "use client";
 
-import { NetworkKey } from "@/types/NetworkKey";
-import { NetworkAccount } from "@/types/NetworkAccount";
-import NetworkButton from "./NetworksPanel/NetworkButton";
-
-import {
-  Instagram,
-  Facebook,
-  Linkedin,
-  Twitter,
-  Hexagon,
-} from "lucide-react";
+import { useState } from "react";
+import { Profile } from "@/types/Profile";
+import ProfileCard from "./ProfileCard";
 
 interface Props {
-  networks: NetworkAccount[];
-  onToggle: (key: NetworkKey, current: boolean) => void;
-  loadingId?: NetworkKey | null;
+  profiles: Profile[];
+  selected: Profile | null;
+  onSelect: (p: Profile) => void;
+  onCreate: (name: string) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
+  onEdit: (id: string, newName: string) => Promise<void>; 
 }
 
-const NETWORKS = [
-  {
-    key: "instagram" as NetworkKey,
-    label: "Instagram",
-    color: "#E1306C",
-    icon: <Instagram size={20} />,
-  },
-  {
-    key: "facebook" as NetworkKey,
-    label: "Facebook",
-    color: "#1877F2",
-    icon: <Facebook size={20} />,
-  },
-  {
-    key: "tiktok" as NetworkKey,
-    label: "TikTok",
-    color: "#000000",
-    icon: <Hexagon size={20} />,
-  },
-  {
-    key: "linkedin" as NetworkKey,
-    label: "LinkedIn",
-    color: "#0A66C2",
-    icon: <Linkedin size={20} />,
-  },
-  {
-    key: "threads" as NetworkKey,
-    label: "Threads",
-    color: "#000000",
-    icon: <Twitter size={20} />,
-  },
-];
+export default function ProfileSidebar({
+  profiles,
+  selected,
+  onSelect,
+  onCreate,
+  onDelete,
+  onEdit,
+}: Props) {
+  const [name, setName] = useState("");
+  const [creating, setCreating] = useState(false);
 
-export default function SocialButtons({ networks, onToggle, loadingId }: Props) {
+  const handleCreate = async () => {
+    if (!name.trim() || creating) return;
+
+    setCreating(true);
+    await onCreate(name.trim());
+    setName("");
+    setCreating(false);
+  };
+
   return (
-    <div className="space-y-3">
-      {NETWORKS.map((net) => {
-        const found = networks.find((n) => n.network === net.key);
-        const active = found?.is_connected ?? false;
+    <div className="space-y-6">
 
-        return (
-          <NetworkButton
-            key={net.key}
-            icon={net.icon}
-            label={net.label}
-            active={active}
-            color={net.color}
-            loading={loadingId === net.key}
-            onClick={() => onToggle(net.key, active)}
+      {/* ======= BLOQUE SUPERIOR (SIEMPRE VISIBLE) ======= */}
+      <div className="bg-white/80 backdrop-blur p-5 rounded-xl shadow-sm border border-gray-100">
+        <h2 className="text-xl font-semibold mb-3">Crear nuevo perfil</h2>
+
+        <div className="flex gap-3">
+          <input
+            type="text"
+            placeholder="Ej: MonoMijin, Negocio..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+            className="border p-2 rounded-xl w-full focus:ring-2 focus:ring-blue-400 outline-none"
           />
-        );
-      })}
+
+          <button
+            onClick={handleCreate}
+            disabled={creating}
+            className={`
+              bg-blue-600 text-white px-4 rounded-xl transition
+              hover:bg-blue-700 
+              ${creating ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
+            `}
+          >
+            {creating ? (
+              <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              "Crear"
+            )}
+          </button>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold">Tus perfiles</h2>
+
+      {/* ======= LISTA DE PERFILES CON SCROLL OPCIONAL ======= */}
+      <div
+        className={`
+          space-y-3 
+          transition-all duration-300
+
+          ${profiles.length > 4 ? "max-h-[450px] overflow-y-auto pr-2" : ""}
+        `}
+      >
+        {profiles.map((p) => (
+          <ProfileCard
+            key={p.id}
+            profile={p}
+            selected={selected?.id === p.id}
+            onClick={() => onSelect(p)}
+            onDelete={() => onDelete(p.id)}
+            onEdit={(newName) => onEdit(p.id, newName)}
+          />
+        ))}
+      </div>
+
     </div>
   );
 }
+
+
+📌 FILE: app/dashboard/components/ProfileSidebar/ProfileCard.tsx
+----------------------------------------------
+"use client";
+
+import { useState, MouseEvent } from "react";
+import { Profile } from "@/types/Profile";
+import { Trash2, Loader2, Pencil, Check } from "lucide-react";
+
+interface Props {
+  profile: Profile;
+  selected: boolean;
+  onClick: () => void;
+  onDelete: () => Promise<void>;
+  onEdit: (newName: string) => Promise<void>;
+}
+
+export default function ProfileCard({
+  profile,
+  selected,
+  onClick,
+  onDelete,
+  onEdit,
+}: Props) {
+  const [editing, setEditing] = useState(false);
+  const [newName, setNewName] = useState(profile.profile_name);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleSave = async () => {
+    if (!newName.trim()) return;
+    setSaving(true);
+    await onEdit(newName.trim());
+    setSaving(false);
+    setEditing(false);
+  };
+
+  const handleDelete = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+
+    if (deleting) return;
+
+    const ok = confirm(
+      `¿Seguro que deseas eliminar el perfil "${profile.profile_name}"?`
+    );
+    if (!ok) return;
+
+    setDeleting(true);
+    await onDelete();
+    setDeleting(false);
+  };
+
+  return (
+    <div
+      onClick={() => {
+        if (!editing && !deleting) onClick();
+      }}
+      className={`
+        group p-4 rounded-xl border cursor-pointer select-none
+        transition-all duration-200 shadow-sm
+        hover:shadow-md hover:bg-gray-50
+        ${selected ? "border-blue-500 bg-blue-50" : "border-gray-200 bg-white"}
+        ${deleting ? "opacity-60 pointer-events-none" : ""}
+      `}
+    >
+      <div className="flex justify-between items-center gap-2">
+        {/* nombre o input editable */}
+        {editing ? (
+          <input
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSave();
+            }}
+            className="border p-1 rounded-lg w-full"
+            autoFocus
+          />
+        ) : (
+          <p className="text-lg font-semibold truncate">
+            {profile.profile_name}
+          </p>
+        )}
+
+        <div className="flex items-center gap-1">
+          {/* guardar */}
+          {editing && (
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="p-2 rounded-lg text-green-600 hover:bg-green-100 transition"
+            >
+              {saving ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <Check size={16} />
+              )}
+            </button>
+          )}
+
+          {/* editar */}
+          {!editing && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setEditing(true);
+              }}
+              className="p-2 rounded-lg text-blue-500 hover:bg-blue-100 transition"
+            >
+              <Pencil size={16} />
+            </button>
+          )}
+
+          {/* borrar */}
+          <button
+            onClick={handleDelete}
+            disabled={saving}
+            className="p-2 rounded-lg text-red-500 hover:bg-red-100 transition"
+          >
+            {deleting ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Trash2 size={16} />
+            )}
+          </button>
+        </div>
+      </div>
+
+      <p className="text-sm text-gray-500 mt-1">
+        Redes conectadas: <b>{profile.connected_count ?? 0}</b>
+      </p>
+    </div>
+  );
+}
+
+
+📌 FILE: app/settings/page.tsx
+----------------------------------------------
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase/client";
+
+import ProfileSettings from "./components/ProfileSettings";
+import SecuritySettings from "./components/SecuritySettings";
+import PreferencesSettings from "./components/PreferencesSettings";
+import PlanSettings from "./components/PlanSettings";
+import DangerZone from "./components/DangerZone";
+import PrivateLayout from "@/components/PrivateLayout"; // Asegura el import correcto
+
+export default function SettingsPage() {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("profile");
+
+  useEffect(() => {
+    const load = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        window.location.href = "/login";
+        return;
+      }
+
+      setUser(session.user);
+      setLoading(false);
+    };
+
+    load();
+  }, []);
+
+  if (loading) return <p className="p-10">Cargando...</p>;
+
+  const menu = [
+    { id: "profile", label: "Perfil" },
+    { id: "security", label: "Seguridad" },
+    { id: "preferences", label: "Preferencias" },
+    { id: "plan", label: "Plan y facturación" },
+    { id: "danger", label: "Zona de peligro" },
+  ];
+
+  return (
+    <PrivateLayout>
+      {/* 1️⃣ CONTENEDOR CENTRAL */}
+      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-10 flex justify-center">
+        <div
+          className="
+            w-full max-w-6xl 
+            bg-white/60 backdrop-blur-xl 
+            rounded-2xl shadow-2xl 
+            p-10 border border-gray-200
+          "
+        >
+          {/* ===== HEADER INTERNO ===== */}
+          <div className="flex items-center justify-between mb-10">
+            <h1 className="text-3xl font-bold text-gray-800">
+              Configuración de {user?.email}
+            </h1>
+
+            <a
+              href="/dashboard"
+              className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition shadow font-medium"
+            >
+              ← Volver al panel
+            </a>
+          </div>
+
+          {/* ===== GRID PRINCIPAL ===== */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+            {/* SIDEBAR */}
+            <div
+              className="
+                bg-white/80 backdrop-blur 
+                border border-gray-200
+                rounded-xl p-6 shadow-lg h-fit
+              "
+            >
+              <h3 className="text-lg font-semibold mb-4">Menú</h3>
+
+              <div className="flex flex-col gap-2">
+                {menu.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`
+                      text-left px-4 py-2 rounded-lg font-medium transition
+                      ${
+                        activeTab === item.id
+                          ? "bg-blue-600 text-white shadow"
+                          : "text-gray-700 hover:bg-gray-100"
+                      }
+                    `}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* CONTENIDO */}
+            <div
+              className="
+                md:col-span-3 
+                bg-white/80 backdrop-blur 
+                rounded-xl shadow-lg border border-gray-200
+                p-10 w-full
+              "
+            >
+              {activeTab === "profile" && <ProfileSettings />}
+              {activeTab === "security" && <SecuritySettings />}
+              {activeTab === "preferences" && <PreferencesSettings />}
+              {activeTab === "plan" && <PlanSettings />}
+              {activeTab === "danger" && <DangerZone />}
+            </div>
+          </div>
+        </div>
+      </div>
+    </PrivateLayout>
+  );
+}
+
+
+📌 FILE: app/settings/components/Section.tsx
+----------------------------------------------
+export default function Section({ title, children }: any) {
+  return (
+    <section className="bg-white rounded-xl shadow-sm border p-6 mb-10">
+      <h3 className="text-xl font-bold mb-4">{title}</h3>
+      {children}
+    </section>
+  );
+}
+
+
+📌 FILE: app/settings/components/ProfileSettings.tsx
+----------------------------------------------
+"use client";
+
+import Section from "./Section";
+
+export default function ProfileSettings() {
+  return (
+    <Section title="Perfil">
+      <p className="text-gray-600 mb-4">
+        Actualiza tu nombre y correo asociado a Syncuenta.
+      </p>
+
+      <div className="flex flex-col gap-4 max-w-md">
+
+        <div>
+          <label className="font-medium">Nombre completo</label>
+          <input
+            type="text"
+            className="w-full border rounded-lg p-2 mt-1"
+            placeholder="Tu nombre"
+          />
+        </div>
+
+        <div>
+          <label className="font-medium">Correo electrónico</label>
+          <input
+            type="email"
+            className="w-full border rounded-lg p-2 mt-1"
+            placeholder="tuemail@ejemplo.com"
+          />
+        </div>
+
+        <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-blue-700">
+          Guardar cambios
+        </button>
+      </div>
+    </Section>
+  );
+}
+
+
+📌 FILE: app/settings/components/SecuritySettings.tsx
+----------------------------------------------
+"use client";
+
+import Section from "./Section";
+
+export default function SecuritySettings() {
+  return (
+    <Section title="Seguridad">
+      <p className="text-gray-600 mb-4">
+        Cambia tu contraseña y revisa la actividad de tu cuenta.
+      </p>
+
+      <div className="flex flex-col gap-4 max-w-md">
+
+        <div>
+          <label className="font-medium">Contraseña actual</label>
+          <input
+            type="password"
+            className="w-full border rounded-lg p-2 mt-1"
+          />
+        </div>
+
+        <div>
+          <label className="font-medium">Nueva contraseña</label>
+          <input
+            type="password"
+            className="w-full border rounded-lg p-2 mt-1"
+          />
+        </div>
+
+        <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-blue-700">
+          Actualizar contraseña
+        </button>
+      </div>
+    </Section>
+  );
+}
+
+
+📌 FILE: app/settings/components/PreferencesSettings.tsx
+----------------------------------------------
+"use client";
+
+import Section from "./Section";
+
+export default function PreferencesSettings() {
+  return (
+    <Section title="Preferencias">
+      <p className="text-gray-600 mb-4">
+        Ajusta tu idioma, zona horaria y preferencias visuales.
+      </p>
+
+      <div className="max-w-md flex flex-col gap-4">
+
+        <div>
+          <label className="font-medium">Idioma</label>
+          <select className="w-full border p-2 rounded-lg mt-1">
+            <option>Español</option>
+            <option>Inglés</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="font-medium">Zona horaria</label>
+          <select className="w-full border p-2 rounded-lg mt-1">
+            <option>GMT-5 Quito / Bogotá</option>
+            <option>GMT-3 Argentina</option>
+            <option>GMT+1 España</option>
+          </select>
+        </div>
+
+        <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-blue-700">
+          Guardar preferencias
+        </button>
+
+      </div>
+    </Section>
+  );
+}
+
+
+📌 FILE: app/settings/components/PlanSettings.tsx
+----------------------------------------------
+"use client";
+
+import Section from "./Section";
+
+export default function PlanSettings() {
+  return (
+    <Section title="Plan y facturación">
+      <p className="text-gray-600 mb-4">
+        Gestiona tu plan, métodos de pago y facturas.
+      </p>
+
+      <div className="bg-gray-50 border rounded-xl p-5 max-w-lg">
+
+        <p className="font-semibold text-lg">Plan actual:</p>
+        <p className="text-blue-600 text-xl font-bold mt-1">Pro (mensual)</p>
+
+        <button className="
+          mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg
+          font-semibold hover:bg-purple-700 shadow
+        ">
+          Cambiar plan
+        </button>
+
+        <hr className="my-6" />
+
+        <button className="text-blue-600 font-medium hover:underline">
+          Ver historial de facturas →
+        </button>
+      </div>
+    </Section>
+  );
+}
+
+
+📌 FILE: app/settings/components/DangerZone.tsx
+----------------------------------------------
+"use client";
+
+import Section from "./Section";
+
+export default function DangerZone() {
+  return (
+    <Section title="Zona de peligro">
+      <p className="text-gray-600 mb-4">
+        Acciones destructivas. Procede con cuidado.
+      </p>
+
+      <div className="border border-red-300 bg-red-50 p-6 rounded-xl max-w-lg">
+        <h4 className="text-red-600 font-bold text-lg">Eliminar cuenta</h4>
+        <p className="text-red-600 text-sm mt-1">
+          Esta acción es permanente y no se puede deshacer.
+        </p>
+
+        <button className="
+          mt-4 bg-red-600 text-white px-6 py-2 rounded-lg
+          font-semibold hover:bg-red-700 shadow
+        ">
+          Eliminar mi cuenta
+        </button>
+      </div>
+    </Section>
+  );
+}
+
+
+📌 FILE: components/Hero.tsx
+----------------------------------------------
+"use client";
+
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { supabase } from "@/lib/supabase/client";
+
+export default function Hero() {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user || null);
+      setLoading(false);
+    };
+    loadUser();
+  }, []);
+
+  return (
+    <section className="w-full pt-32 pb-32 px-6 text-center bg-[#f8fafc] relative">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-4xl mx-auto"
+      >
+        {/* ============================ */}
+        {/*       HERO TEXT              */}
+        {/* ============================ */}
+
+        <h1 className="text-5xl md:text-6xl font-extrabold leading-tight text-gray-900">
+          Administra todas tus redes
+          <br />
+          <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+            desde una misma plataforma
+          </span>
+        </h1>
+
+        <p className="text-gray-600 mt-6 text-lg md:text-xl max-w-2xl mx-auto">
+          Crea múltiples perfiles, conecta tus redes sociales, publica en varias
+          plataformas a la vez y automatiza tu presencia digital como un profesional.
+        </p>
+
+        {/* ============================ */}
+        {/*       BOTONES SUAVES        */}
+        {/* ============================ */}
+
+        <div className="flex justify-center gap-5 mt-12 flex-wrap">
+
+          {/* BOTÓN PRINCIPAL */}
+          <AnimatePresence mode="wait">
+            {!loading && (
+              <motion.div
+                key="main-button"
+                initial={{ opacity: 0, scale: 0.94 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35 }}
+              >
+                <Link
+                  href={user ? "/dashboard" : "/register"}
+                  className="
+                    min-w-[190px]
+                    block text-center
+                    px-8 py-4 rounded-xl 
+                    bg-blue-600 text-white 
+                    font-semibold shadow-lg 
+                    hover:bg-blue-700 
+                    transition transform hover:scale-[1.02]
+                  "
+                >
+                  {user ? "Ir al Dashboard" : "Crear cuenta gratis"}
+                </Link>
+              </motion.div>
+            )}
+
+            {loading && (
+              <motion.div
+                key="placeholder-main"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0 }}
+                className="min-w-[190px] h-14"
+              />
+            )}
+          </AnimatePresence>
+
+          {/* BOTÓN SECUNDARIO */}
+          <AnimatePresence mode="wait">
+            {!loading && (
+              <motion.div
+                key="secondary-button"
+                initial={{ opacity: 0, scale: 0.94 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35, delay: 0.05 }}
+              >
+                <Link
+                  href={user ? "/pricing" : "/login"}
+                  className="
+                    min-w-[190px]
+                    block text-center
+                    px-8 py-4 rounded-xl 
+                    bg-white border border-gray-300 
+                    text-gray-800 font-semibold 
+                    shadow hover:bg-gray-100 transition
+                  "
+                >
+                  {user ? "Mejorar plan" : "Iniciar sesión"}
+                </Link>
+              </motion.div>
+            )}
+
+            {loading && (
+              <motion.div
+                key="placeholder-secondary"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0 }}
+                className="min-w-[190px] h-14"
+              />
+            )}
+          </AnimatePresence>
+
+        </div>
+
+        {/* ============================ */}
+        {/*   ICONOS PLATAFORMAS        */}
+        {/* ============================ */}
+
+        <div className="mt-16">
+          <p className="text-gray-500 text-sm tracking-wide mb-5">
+            Plataformas soportadas
+          </p>
+
+          <div className="flex justify-center gap-10 flex-wrap opacity-100">
+            {[
+              "tiktok",
+              "instagram",
+              "youtube",
+              "linkedin",
+              "threads",
+              "facebook",
+              "x",
+              "pinterest",
+              "reddit",
+              "bluesky",
+            ].map((icon) => (
+              <img
+                key={icon}
+                src={`/${icon}.svg`}
+                className="w-10 h-10 opacity-100 hover:opacity-80 transition"
+              />
+            ))}
+          </div>
+        </div>
+
+      </motion.div>
+    </section>
+  );
+}
+
+
+📌 FILE: components/HowItWorks.tsx
+----------------------------------------------
+"use client";
+
+import { motion } from "framer-motion";
+import { UserPlus, Layers, Share2, Send, Clock } from "lucide-react";
+
+interface StepIconProps {
+  title: string;
+  text: string;
+  icon: React.ReactNode;
+}
+
+export default function HowItWorks() {
+  return (
+    <section id="how" className="py-28 bg-white border-t border-gray-200">
+      <div className="max-w-7xl mx-auto px-6 text-center">
+
+        <h3 className="text-5xl font-extrabold mb-10">
+          ¿Cómo funciona Syncuenta?
+        </h3>
+
+        <p className="text-xl text-gray-600 mx-auto mb-16">
+          Un flujo simple y poderoso para organizar marcas, gestionar redes y automatizar tu contenido.
+        </p>
+
+        <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-6">
+
+          <StepIcon
+            title="Crea tu cuenta"
+            text="Accede a tu panel central."
+            icon={<UserPlus size={40} strokeWidth={1.5} className="text-blue-600" />}
+          />
+
+          <Arrow />
+
+          <StepIcon
+            title="Crea un perfil"
+            text="Marca, cliente o proyecto."
+            icon={<Layers size={40} strokeWidth={1.5} className="text-purple-600" />}
+          />
+
+          <Arrow />
+
+          <StepIcon
+            title="Conecta redes"
+            text="Instagram, TikTok, Facebook, LinkedIn, Threads."
+            icon={<Share2 size={40} strokeWidth={1.5} className="text-pink-500" />}
+          />
+
+          <Arrow />
+
+          <StepIcon
+            title="Publica sin límites"
+            text="Envía contenido a todas tus redes."
+            icon={<Send size={40} strokeWidth={1.5} className="text-green-600" />}
+          />
+
+          <Arrow />
+
+          <StepIcon
+            title="Automatiza"
+            text="Programa y deja que Syncuenta trabaje."
+            icon={<Clock size={40} strokeWidth={1.5} className="text-yellow-500" />}
+          />
+
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StepIcon({ title, text, icon }: StepIconProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
+      className="flex flex-col items-center text-center max-w-xs"
+    >
+      <div className="p-4 rounded-full bg-gray-100 shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+        {icon}
+      </div>
+      <h4 className="text-xl font-bold mt-4">{title}</h4>
+      <p className="text-gray-600 mt-1 text-sm">{text}</p>
+    </motion.div>
+  );
+}
+
+function Arrow() {
+  return (
+    <svg className="hidden md:block w-10 h-10 text-gray-400" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m-4-4l4 4-4 4" />
+    </svg>
+  );
+}
+
+
+📌 FILE: components/PricingSection.tsx
+----------------------------------------------
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+
+interface PricingCardProps {
+  name: string;
+  monthly: number;
+  yearly: number;
+  profiles: number;
+  highlight?: boolean;
+}
+
+export default function PricingSection() {
+  const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
+
+  const plans = [
+    { name: "Basic", monthly: 12, yearly: 99, profiles: 2 },
+    { name: "Pro", monthly: 29, yearly: 249, profiles: 5, highlight: true },
+    { name: "Business", monthly: 79, yearly: 649, profiles: 10 },
+  ];
+
+  return (
+    <section id="plans" className="py-32 bg-white text-center">
+      <div className="max-w-6xl mx-auto px-6">
+
+        <h3 className="text-5xl font-extrabold mb-6">
+          Precios transparentes
+        </h3>
+
+        <p className="text-xl text-gray-600 mb-12">
+          Diseñado para creadores, negocios y agencias.
+        </p>
+
+        {/* ==== BILLING TOGGLE ==== */}
+        <div className="flex justify-center mb-16">
+          <div className="bg-gray-200 p-2 rounded-full flex gap-2">
+            
+            {/* MENSUAL */}
+            <button
+              onClick={() => setBilling("monthly")}
+              className={`
+                px-6 py-2 rounded-full font-semibold transition
+                ${billing === "monthly" ? "bg-white text-blue-600 shadow" : "text-gray-600"}
+              `}
+            >
+              Mensual
+            </button>
+
+            {/* ANUAL */}
+            <button
+              onClick={() => setBilling("annual")}
+              className={`
+                px-6 py-2 rounded-full font-semibold transition
+                ${billing === "annual" ? "bg-white text-blue-600 shadow" : "text-gray-600"}
+              `}
+            >
+              Anual -40%
+            </button>
+
+          </div>
+        </div>
+
+        {/* ==== CARDS ==== */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {plans.map((p) => (
+            <PricingCard
+              key={p.name}
+              name={p.name}
+              monthly={p.monthly}
+              yearly={p.yearly}
+              profiles={p.profiles}
+              highlight={p.highlight}
+              billing={billing}
+            />
+          ))}
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+/* ====================================================================== */
+/* ========================= PRICING CARD ================================ */
+/* ====================================================================== */
+
+interface CardProps extends PricingCardProps {
+  billing: "monthly" | "annual";
+}
+
+function PricingCard({ name, monthly, yearly, profiles, highlight, billing }: CardProps) {
+  const price = billing === "monthly" ? monthly : yearly;
+  const monthlyEquivalent = (yearly / 12).toFixed(2);
+  const savings = Math.round(((monthly * 12) - yearly));
+
+  return (
+    <div
+      className={`
+        p-8 rounded-2xl border shadow-lg relative
+        ${highlight ? "border-purple-600 shadow-purple-200 scale-[1.03]" : "border-gray-200"}
+        transition
+      `}
+    >
+      {/* NAME */}
+      <h4 className="text-3xl font-bold mb-2">{name}</h4>
+
+      {/* PRICE */}
+      <div className="flex flex-col items-center">
+        <p className="
+          text-4xl font-extrabold 
+          bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text
+        ">
+          ${price}
+        </p>
+
+        <p className="text-gray-500 mt-1">
+          /{billing === "monthly" ? "mes" : "año"}
+        </p>
+
+        {/* ANNUAL SAVINGS */}
+        {billing === "annual" && (
+          <p className="text-green-600 font-semibold mt-2 text-sm">
+            Equivalente a ${monthlyEquivalent}/mes — Ahorra ${savings}
+          </p>
+        )}
+      </div>
+
+      {/* FEATURES */}
+      <ul className="text-left mt-8 space-y-4">
+
+        {/* unlimited uploads tooltip */}
+        <TooltipItem
+          label="Publicaciones ilimitadas"
+          tooltipTitle="Límites por red social (24h)"
+          tooltipContent={
+            <CapsTable />
+          }
+        />
+
+        <ListItem text="TikTok, Instagram, LinkedIn, YouTube, Facebook, X, Threads, Pinterest, Reddit, Bluesky" />
+        <ListItem text="Programar publicaciones" />
+        <ListItem text="Analytics" />
+
+        {/* PROFILES tooltip */}
+        <TooltipItem
+          label={`${profiles} perfiles`}
+          tooltipTitle="¿Qué son perfiles?"
+          tooltipContent={
+            <div>
+              <p className="opacity-80 mb-2">
+                Cada perfil permite conectar <strong>una cuenta por plataforma</strong>.
+              </p>
+              <ul className="list-disc list-inside opacity-80 space-y-1">
+                <li>{profiles} TikTok accounts</li>
+                <li>{profiles} Instagram accounts</li>
+                <li>{profiles} YouTube channels</li>
+                <li>…y así sucesivamente</li>
+              </ul>
+            </div>
+          }
+        />
+      </ul>
+
+      {/* CTA */}
+      <Link
+        href="/register"
+        className={`
+          block text-center mt-10 py-3 rounded-xl font-semibold
+          ${highlight
+            ? "bg-purple-600 text-white hover:bg-purple-700"
+            : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+          }
+          transition
+        `}
+      >
+        Probar 7 días gratis
+      </Link>
+    </div>
+  );
+}
+
+/* ====================================================================== */
+/* ======================= SMALL COMPONENTS ============================== */
+/* ====================================================================== */
+
+function ListItem({ text }: { text: string }) {
+  return (
+    <li className="flex items-start gap-2 text-gray-700">
+      ✔ <span>{text}</span>
+    </li>
+  );
+}
+
+function TooltipItem({
+  label,
+  tooltipTitle,
+  tooltipContent,
+}: {
+  label: string;
+  tooltipTitle: string;
+  tooltipContent: React.ReactNode;
+}) {
+  return (
+    <li className="flex items-start gap-2 text-gray-700">
+      ✔{" "}
+      <span className="relative group cursor-pointer">
+        {label}
+        <span className="text-blue-600 font-bold ml-1">?</span>
+
+        {/* Tooltip */}
+        <div className="
+          absolute left-0 bottom-full mb-3 w-80 p-4 rounded-xl bg-gray-900 
+          text-white text-sm opacity-0 group-hover:opacity-100 transition 
+          pointer-events-none shadow-xl z-30
+        ">
+          <p className="font-semibold mb-2">{tooltipTitle}</p>
+          {tooltipContent}
+        </div>
+      </span>
+    </li>
+  );
+}
+
+function CapsTable() {
+  return (
+    <table className="w-full text-left text-xs mb-3 opacity-90">
+      <tbody>
+        <tr><td>Instagram</td><td className="text-right">50</td></tr>
+        <tr><td>TikTok</td><td className="text-right">15</td></tr>
+        <tr><td>LinkedIn</td><td className="text-right">150</td></tr>
+        <tr><td>YouTube</td><td className="text-right">10</td></tr>
+        <tr><td>Facebook</td><td className="text-right">25</td></tr>
+        <tr><td>X / Twitter</td><td className="text-right">50</td></tr>
+        <tr><td>Threads</td><td className="text-right">50</td></tr>
+        <tr><td>Pinterest</td><td className="text-right">20</td></tr>
+        <tr><td>Reddit</td><td className="text-right">40</td></tr>
+      </tbody>
+    </table>
+  );
+}
+
+
+📌 FILE: components/PrivateHeader.tsx
+----------------------------------------------
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { supabase } from "@/lib/supabase/client";
+import {
+  Home,
+  Share2,
+  User,
+  Calendar,
+  Settings,
+  LogOut,
+  Bell
+} from "lucide-react";
+
+export default function PrivateHeader({ user }: { user: any }) {
+  const pathname = usePathname();
+
+  const isActive = (path: string) =>
+    pathname.startsWith(path)
+      ? "bg-blue-600 text-white shadow"
+      : "text-gray-600 hover:bg-gray-100";
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/login";
+  };
+
+  return (
+    <header
+      className="
+        w-full bg-white 
+        border-b border-gray-100 
+        shadow-[0_1px_3px_rgba(0,0,0,0.04)]
+      "
+    >
+      <div className="max-w-6xl mx-auto px-8 py-4 flex items-center justify-between">
+
+        {/* LEFT */}
+        <div className="flex items-center gap-10">
+
+          {/* LOGO */}
+          <Link href="/dashboard" className="text-2xl font-extrabold">
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Syncuenta
+            </span>
+          </Link>
+
+          {/* NAV */}
+          <nav className="flex items-center gap-2">
+
+            <Link href="/dashboard"
+              className={`flex gap-2 px-4 py-2 rounded-lg font-medium transition ${isActive("/dashboard")}`}
+            >
+              <Home size={18} /> Dashboard
+            </Link>
+
+            <Link href="/publish"
+              className={`flex gap-2 px-4 py-2 rounded-lg font-medium transition ${isActive("/publish")}`}
+            >
+              <Share2 size={18} /> Publicar
+            </Link>
+
+            <Link href="/schedule"
+              className={`flex gap-2 px-4 py-2 rounded-lg font-medium transition ${isActive("/schedule")}`}
+            >
+              <Calendar size={18} /> Programar
+            </Link>
+
+            <Link href="/affiliates"
+              className={`flex gap-2 px-4 py-2 rounded-lg font-medium transition ${isActive("/affiliates")}`}
+            >
+              <User size={18} /> Afiliados
+            </Link>
+
+            <Link href="/settings"
+              className={`flex gap-2 px-4 py-2 rounded-lg font-medium transition ${isActive("/settings")}`}
+            >
+              <Settings size={18} /> Configuración
+            </Link>
+
+          </nav>
+        </div>
+
+        {/* RIGHT */}
+        <div className="flex items-center gap-6">
+
+          {/* NOTIFICACIONES */}
+          <button className="text-gray-500 hover:text-gray-800 relative">
+            <Bell size={20} />
+            <span className="absolute top-0 right-0 h-2 w-2 bg-red-600 rounded-full"></span>
+          </button>
+
+          {/* AVATAR */}
+          <div className="flex items-center gap-3 cursor-pointer">
+            <div
+              className="
+                w-9 h-9 rounded-full bg-gray-100 
+                flex items-center justify-center 
+                text-sm font-semibold text-gray-700 
+                border border-gray-300 overflow-hidden
+              "
+            >
+              {user?.user_metadata?.avatar_url ? (
+                <img
+                  src={user.user_metadata.avatar_url}
+                  className="w-full h-full object-cover"
+                  alt="avatar"
+                />
+              ) : (
+                <span>{(user?.email?.[0] || "U").toUpperCase()}</span>
+              )}
+            </div>
+          </div>
+
+          {/* LOGOUT */}
+          <button
+            onClick={logout}
+            className="flex items-center gap-2 text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg"
+          >
+            <LogOut size={18} />
+          </button>
+
+        </div>
+
+      </div>
+    </header>
+  );
+}
+
+
+📌 FILE: components/PrivateLayout.tsx
+----------------------------------------------
+"use client";
+
+import PrivateHeader from "@/components/PrivateHeader";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase/client";
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* HEADER GLOBAL */}
+      <PrivateHeader user={user} />
+
+      {/* CONTENIDO DEL DASHBOARD */}
+      <main className="pt-6 px-6">{children}</main>
+    </div>
+  );
+}
+
+
+📌 FILE: components/PublicHeader.tsx
+----------------------------------------------
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { supabase } from "@/lib/supabase/client";
+import { LogOut } from "lucide-react";
+
+export default function PublicHeader() {
+  const [user, setUser] = useState<any>(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user || null);
+      setLoadingUser(false);
+    };
+    load();
+  }, []);
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/";
+  };
+
+  return (
+    <header className="w-full py-6 border-b border-gray-200/50 bg-white/70 backdrop-blur-xl sticky top-0 z-20">
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+
+        {/* LOGO */}
+        <h1
+          className="
+            text-3xl font-extrabold bg-gradient-to-r 
+            from-blue-600 to-purple-600 bg-clip-text text-transparent
+            cursor-pointer
+          "
+        >
+          <Link href="/">Syncuenta</Link>
+        </h1>
+
+        {/* NAV RIGHT */}
+        <nav className="flex items-center gap-6 text-gray-700 font-medium">
+
+          <a href="#features" className="hover:text-blue-600 transition">Características</a>
+          <a href="#plans" className="hover:text-blue-600 transition">Planes</a>
+          <a href="#how" className="hover:text-blue-600 transition">Cómo funciona</a>
+
+          {/* ESTADO DE SESIÓN */}
+          {!loadingUser && (
+            user ? (
+              <div className="flex items-center gap-4">
+
+                {/* DASHBOARD */}
+                <Link
+                  href="/dashboard"
+                  className="px-5 py-2 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 transition"
+                >
+                  Dashboard
+                </Link>
+
+                {/* BOTÓN LOGOUT (ÍCONO IGUAL AL DASHBOARD) */}
+                <button
+                  onClick={logout}
+                  className="p-2 rounded-lg hover:bg-gray-200 transition text-red-600"
+                  title="Cerrar sesión"
+                >
+                  <LogOut size={20} />
+                </button>
+
+              </div>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="px-4 py-2 text-blue-600 font-semibold hover:text-blue-700 transition"
+                >
+                  Iniciar sesión
+                </Link>
+
+                <Link 
+                  href="/register"
+                  className="px-5 py-2 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 transition"
+                >
+                  Crear cuenta
+                </Link>
+              </>
+            )
+          )}
+
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+
+📌 FILE: components/Spinner.tsx
+----------------------------------------------
+export default function Spinner() {
+  return (
+    <div className="w-full flex justify-center py-20">
+      <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-400 border-t-transparent" />
+    </div>
+  );
+}
+
+
+📌 FILE: components/ui/Button.tsx
+----------------------------------------------
+
+
+📌 FILE: components/ui/Card.tsx
+----------------------------------------------
+
+
+📌 FILE: components/ui/Input.tsx
+----------------------------------------------
 
 
 📌 FILE: hooks/useNetworks.ts
@@ -401,6 +2714,114 @@ export function useNetworks(profileId: string | null) {
 
   return { networks, loading, toggle, reload: load };
 }
+
+
+📌 FILE: hooks/useProfiles.ts
+----------------------------------------------
+"use client";
+
+import { useEffect, useState } from "react";
+import {
+  getProfilesByUser,
+  createProfile,
+  deleteProfile,
+  countConnectedNetworks,
+  renameProfile,
+} from "@/lib/supabase/profiles";
+import { Profile } from "@/types/Profile";
+
+export function useProfiles(userId: string | null) {
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [selected, setSelected] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    if (!userId) return;
+
+    const raw = await getProfilesByUser(userId);
+
+    const withCounts = await Promise.all(
+      raw.map(async (p) => ({
+        ...p,
+        connected_count: await countConnectedNetworks(p.id),
+      }))
+    );
+
+    setProfiles(withCounts);
+
+    // 🔥 Si no hay perfiles, limpiar selección y detener
+    if (withCounts.length === 0) {
+      setSelected(null);
+      setLoading(false);
+      return;
+    }
+
+    // 🔥 Solo seleccionar automáticamente si no había selección previa
+    if (!selected) {
+      setSelected(withCounts[0]);
+    }
+
+    setLoading(false);
+  };
+
+  const addProfile = async (name: string) => {
+    if (!userId) return;
+    await createProfile(userId, name);
+    await load();
+  };
+
+  const removeProfile = async (id: string) => {
+    await deleteProfile(id);
+
+    const newList = profiles.filter((p) => p.id !== id);
+    setProfiles(newList);
+
+    // 🔥 Si no queda ningún perfil, no crear nada automático
+    if (newList.length === 0) {
+      setSelected(null);
+      return;
+    }
+
+    // 🔥 Si eliminaste el perfil seleccionado, seleccionar otro
+    if (selected?.id === id) {
+      setSelected(newList[0]);
+    }
+  };
+
+const editProfile = async (id: string, newName: string) => {
+  if (!userId) return;
+
+  await renameProfile(id, userId, newName);
+  await load();
+};
+
+
+
+  useEffect(() => {
+    load();
+  }, [userId]);
+
+  return {
+    profiles,
+    selected,
+    setSelected,
+    loading,
+    addProfile,
+    removeProfile,
+    editProfile,
+    reload: load,
+  };
+}
+
+
+📌 FILE: lib/supabase/client.ts
+----------------------------------------------
+import { createClient } from "@supabase/supabase-js";
+
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 
 📌 FILE: lib/supabase/networks.ts
@@ -481,6 +2902,65 @@ export async function toggleNetwork(
 }
 
 
+📌 FILE: lib/supabase/profiles.ts
+----------------------------------------------
+import { supabase } from "./client";
+import { Profile } from "@/types/Profile";
+
+export async function getProfilesByUser(userId: string): Promise<Profile[]> {
+  const { data, error } = await supabase
+    .from("profiles_social")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at");
+
+  if (error) throw error;
+
+  return data || [];
+}
+
+export async function createProfile(userId: string, name: string) {
+  const { error } = await supabase.from("profiles_social").insert({
+    user_id: userId,
+    profile_name: name,
+  });
+  if (error) throw error;
+}
+
+export async function deleteProfile(profileId: string) {
+  const { error } = await supabase
+    .from("profiles_social")
+    .delete()
+    .eq("id", profileId);
+
+  if (error) throw error;
+}
+
+export async function countConnectedNetworks(profileId: string): Promise<number> {
+  const { count } = await supabase
+    .from("profile_network_accounts")
+    .select("*", { count: "exact", head: true })
+    .eq("profile_id", profileId)
+    .eq("is_connected", true);
+
+  return count || 0;
+}
+
+
+export async function renameProfile(id: string, userId: string, newName: string) {
+  const { error } = await supabase
+    .from("profiles_social")
+    .update({ profile_name: newName })
+    .eq("id", id)
+    .eq("user_id", userId); // 🔥 obligatorio
+
+  if (error) {
+    console.error("❌ Error renombrando perfil:", error);
+  }
+}
+
+
+
 📌 FILE: types/NetworkAccount.ts
 ----------------------------------------------
 import { NetworkKey } from "./NetworkKey";
@@ -506,258 +2986,14 @@ export type NetworkKey =
   | "threads";
 
 
-📌 FILE: hooks/useProfiles.ts
+📌 FILE: types/Profile.ts
 ----------------------------------------------
-"use client";
-
-import { useEffect, useState } from "react";
-import {
-  getProfilesByUser,
-  createProfile,
-  deleteProfile,
-  countConnectedNetworks,
-} from "@/lib/supabase/profiles";
-import { Profile } from "@/types/Profile";
-
-export function useProfiles(userId: string | null) {
-  const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [selected, setSelected] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const load = async () => {
-    if (!userId) return;
-
-    const raw = await getProfilesByUser(userId);
-
-    const withCounts = await Promise.all(
-      raw.map(async (p) => ({
-        ...p,
-        connected_count: await countConnectedNetworks(p.id),
-      }))
-    );
-
-    setProfiles(withCounts);
-
-    // 🔥 Si no hay perfiles, limpiar selección y detener
-    if (withCounts.length === 0) {
-      setSelected(null);
-      setLoading(false);
-      return;
-    }
-
-    // 🔥 Solo seleccionar automáticamente si no había selección previa
-    if (!selected) {
-      setSelected(withCounts[0]);
-    }
-
-    setLoading(false);
-  };
-
-  const addProfile = async (name: string) => {
-    if (!userId) return;
-    await createProfile(userId, name);
-    await load();
-  };
-
-  const removeProfile = async (id: string) => {
-    await deleteProfile(id);
-
-    const newList = profiles.filter((p) => p.id !== id);
-    setProfiles(newList);
-
-    // 🔥 Si no queda ningún perfil, no crear nada automático
-    if (newList.length === 0) {
-      setSelected(null);
-      return;
-    }
-
-    // 🔥 Si eliminaste el perfil seleccionado, seleccionar otro
-    if (selected?.id === id) {
-      setSelected(newList[0]);
-    }
-  };
-
-  useEffect(() => {
-    load();
-  }, [userId]);
-
-  return {
-    profiles,
-    selected,
-    setSelected,
-    loading,
-    addProfile,
-    removeProfile,
-    reload: load,
-  };
-}
-
-
-📌 FILE: app/dashboard/components/ProfileSidebar/ProfileSidebar.tsx
-----------------------------------------------
-"use client";
-
-import { useState } from "react";
-import { Profile } from "@/types/Profile";
-import ProfileCard from "./ProfileCard";
-
-interface Props {
-  profiles: Profile[];
-  selected: Profile | null;
-  onSelect: (p: Profile) => void;
-  onCreate: (name: string) => Promise<void>;
-  onDelete: (id: string) => Promise<void>;
-}
-
-export default function ProfileSidebar({
-  profiles,
-  selected,
-  onSelect,
-  onCreate,
-  onDelete,
-}: Props) {
-  const [name, setName] = useState("");
-  const [creating, setCreating] = useState(false); // 🔥 para spinner/disabled
-
-  const handleCreate = async () => {
-    if (!name.trim() || creating) return;
-
-    setCreating(true);
-    await onCreate(name.trim());
-    setName("");
-    setCreating(false);
-  };
-
-  return (
-    <div className="space-y-6">
-
-      {/* Crear perfil */}
-      <div className="bg-white/80 backdrop-blur p-5 rounded-xl shadow-sm border border-gray-100">
-        <h2 className="text-xl font-semibold mb-3">Crear nuevo perfil</h2>
-
-        <div className="flex gap-3">
-          <input
-            type="text"
-            placeholder="Ej: MonoMijin, Negocio..."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleCreate(); // 🔥 ENTER crea
-            }}
-            className="border p-2 rounded-xl w-full focus:ring-2 focus:ring-blue-400 outline-none"
-          />
-
-          <button
-            onClick={handleCreate}
-            disabled={creating}
-            className={`
-              bg-blue-600 text-white px-4 rounded-xl transition
-              hover:bg-blue-700 
-              ${creating ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
-            `}
-          >
-            {creating ? (
-              <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            ) : (
-              "Crear"
-            )}
-          </button>
-        </div>
-      </div>
-
-      <h2 className="text-2xl font-bold">Tus perfiles</h2>
-
-      <div className="space-y-3">
-        {profiles.map((p) => (
-          <ProfileCard
-            key={p.id}
-            profile={p}
-            selected={selected?.id === p.id}
-            onClick={() => onSelect(p)}
-            onDelete={() => onDelete(p.id)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-
-📌 FILE: app/dashboard/components/ProfileSidebar/ProfileCard.tsx
-----------------------------------------------
-// app/dashboard/components/ProfileSidebar/ProfileCard.tsx
-
-"use client";
-
-import { useState } from "react";
-import { Profile } from "@/types/Profile";
-import { Trash2, Loader2 } from "lucide-react";
-
-interface Props {
-  profile: Profile;
-  selected: boolean;
-  onClick: () => void;
-  onDelete: () => void;
-}
-
-export default function ProfileCard({
-  profile,
-  selected,
-  onClick,
-  onDelete,
-}: Props) {
-  const [deleting, setDeleting] = useState(false);
-
-  const handleDelete = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // evitar seleccionar al borrar
-
-    if (deleting) return;
-
-    const ok = confirm(`¿Seguro que deseas eliminar el perfil "${profile.profile_name}"?`);
-    if (!ok) return;
-
-    setDeleting(true);
-    await onDelete();
-    setDeleting(false);
-  };
-
-  return (
-    <div
-      onClick={() => {
-        if (!deleting) onClick();
-      }}
-      className={`
-        group p-4 rounded-xl border cursor-pointer select-none
-        transition-all duration-200 shadow-sm
-        hover:shadow-md hover:bg-gray-50
-        ${selected ? "border-blue-500 bg-blue-50" : "border-gray-200 bg-white"}
-        ${deleting ? "opacity-60 pointer-events-none" : ""}
-      `}
-    >
-      <div className="flex justify-between items-center">
-        <p className="text-lg font-semibold">{profile.profile_name}</p>
-
-        <button
-          onClick={handleDelete}
-          disabled={deleting}
-          className={`
-            p-2 rounded-lg transition
-            ${deleting ? "text-gray-400" : "text-red-500 hover:bg-red-100"}
-          `}
-        >
-          {deleting ? (
-            <Loader2 size={16} className="animate-spin" />
-          ) : (
-            <Trash2 size={16} />
-          )}
-        </button>
-      </div>
-
-      <p className="text-sm text-gray-500 mt-1">
-        Redes conectadas: <b>{profile.connected_count ?? 0}</b>
-      </p>
-    </div>
-  );
+export interface Profile {
+  id: string;
+  user_id: string;
+  profile_name: string;
+  created_at: string;
+  connected_count?: number;
 }
 
 

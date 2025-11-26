@@ -6,6 +6,7 @@ import {
   createProfile,
   deleteProfile,
   countConnectedNetworks,
+  renameProfile,
 } from "@/lib/supabase/profiles";
 import { Profile } from "@/types/Profile";
 
@@ -67,6 +68,15 @@ export function useProfiles(userId: string | null) {
     }
   };
 
+const editProfile = async (id: string, newName: string) => {
+  if (!userId) return;
+
+  await renameProfile(id, userId, newName);
+  await load();
+};
+
+
+
   useEffect(() => {
     load();
   }, [userId]);
@@ -78,6 +88,7 @@ export function useProfiles(userId: string | null) {
     loading,
     addProfile,
     removeProfile,
+    editProfile,
     reload: load,
   };
 }
